@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3. 문단별 심층 분석 워크북 (29번)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .sentence {
+            cursor: pointer;
+            transition: background-color 0.2s;
+            padding: 2px 0;
+            border-radius: 4px;
+        }
+        .sentence:hover {
+            background-color: #dbeafe; /* blue-100 */
+        }
+        .selected-boundary {
+            font-weight: bold;
+            color: #1d4ed8; /* blue-700 */
+        }
+        .segment-divider {
+            border-bottom: 2px dashed #fbbf24; /* amber-400 */
+            margin: 8px 0;
+            padding-bottom: 8px;
+        }
+        .feedback-correct {
+            color: #16a34a; /* green-600 */
+        }
+        .feedback-incorrect {
+            color: #dc2626; /* red-600 */
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 sm:p-6">
+    <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-4xl">
+        
+        <div id="main-container">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 text-center border-b pb-4">3. 문단별 심층 분석 워크북 (29번)</h1>
+            
+            <!-- Step 1: Segmentation Task -->
+            <div id="segmentation-container">
+                <p id="segmentation-instruction" class="text-lg text-center bg-blue-50 text-blue-800 p-4 rounded-lg mb-6"></p>
+                <div id="text-container" class="text-gray-700 leading-relaxed text-lg p-4 border rounded-lg"></div>
+                <p id="segmentation-feedback" class="text-center mt-4 h-6 text-lg font-medium"></p>
+            </div>
+
+            <!-- Step 2: Analysis Tasks (Initially Hidden) -->
+            <div id="analysis-container" class="hidden">
+                <p class="text-xl text-center bg-green-50 text-green-800 p-4 rounded-lg mb-8 font-semibold">성공! 이제 각 부분의 핵심 내용을 분석해 보세요.</p>
+                <div id="analysis-tasks-container" class="space-y-8"></div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        const data = {
+          "pageTitle": "3. 문단별 심층 분석 워크북 (29번)",
+          "fullText": "When a cell divides, the genomes of its two daughters are often not quite identical to each other or to that of the parent cell. On rare occasions, the error may represent a change for the better — more probably, it will cause no significant difference in the cell’s prospects. But in some cases, the error will cause serious damage — for example, by disrupting the coding sequence for a key protein. Changes due to mistakes of the first type will tend to be perpetuated, because the altered cell has an increased likelihood of reproducing itself. Changes due to mistakes of the second type — neutral changes — may be perpetuated or not: it is a matter of chance whether the altered cell or its cousins will succeed. But changes that cause serious damage lead nowhere: the cell that suffers them dies, leaving no progeny. Through endless repetition of this cycle of mutation and natural selection organisms evolve: their genetic specifications change, sometimes giving organisms new ways to exploit the environment more effectively, to survive in competition with others, and to reproduce successfully.",
+          "segmentationTask": {
+            "instruction": "아래 원문은 분석지에 따라 세 부분으로 나뉩니다. 각 부분이 끝나는 문장을 클릭하여 영역을 나누어 보세요.",
+            "correctEndSentences": [
+              "But in some cases, the error will cause serious damage — for example, by disrupting the coding sequence for a key protein.",
+              "But changes that cause serious damage lead nowhere: the cell that suffers them dies, leaving no progeny.",
+              "Through endless repetition of this cycle of mutation and natural selection organisms evolve: their genetic specifications change, sometimes giving organisms new ways to exploit the environment more effectively, to survive in competition with others, and to reproduce successfully."
+            ]
+          },
+          "analysisTasks": [
+            {
+              "partNumber": 1,
+              "partText": "When a cell divides, the genomes of its two daughters are often not quite identical to each other or to that of the parent cell. On rare occasions, the error may represent a change for the better — more probably, it will cause no significant difference in the cell’s prospects. But in some cases, the error will cause serious damage — for example, by disrupting the coding sequence for a key protein.",
+              "mainIdea": { "question": "부분의 중심내용: 세포분열 시 발생하는 **(가) [빈칸]**는 긍정적, 중립적, 부정적인 세 가지 유형으로 나뉜다.", "answer": "오류(돌연변이)" },
+              "role": { "question": "부분의 역할: 글의 핵심 소재인 '세포 분열 오류'의 개념을 소개하고, 그 결과를 세 가지 유형으로 [빈칸]하여 앞으로 전개될 내용의 틀을 제시합니다.", "answer": "분류" }
+            },
+            {
+              "partNumber": 2,
+              "partText": "Changes due to mistakes of the first type will tend to be perpetuated, because the altered cell has an increased likelihood of reproducing itself. Changes due to mistakes of the second type — neutral changes — may be perpetuated or not: it is a matter of chance whether the altered cell or its cousins will succeed. But changes that cause serious damage lead nowhere: the cell that suffers them dies, leaving no progeny.",
+              "mainIdea": { "question": "부분의 중심내용: (가)돌연변이의 세 가지 유형은 각각의 생존 가능성에 따라 (나) [빈칸]의 과정(영속되거나 사라짐)을 거친다.", "answer": "자연 선택" },
+              "role": { "question": "부분의 역할: 앞에서 분류한 세 유형의 오류가 '자연 선택'이라는 원리에 따라 어떤 운명을 맞이하는지 구체적으로 [빈칸]하며, 진화의 메커니즘을 보여줍니다.", "answer": "설명" }
+            },
+            {
+              "partNumber": 3,
+              "partText": "Through endless repetition of this cycle of mutation and natural selection organisms evolve: their genetic specifications change, sometimes giving organisms new ways to exploit the environment more effectively, to survive in competition with others, and to reproduce successfully.",
+              "mainIdea": { "question": "부분의 중심내용: (가)돌연변이와 (나)자연 선택의 순환이 반복됨으로써, 유기체는 환경에 더 잘 적응하는 방향으로 (다) [빈칸]한다.", "answer": "진화" },
+              "role": { "question": "부분의 역할: 앞선 과정을 종합하여 '진화'라는 최종 [빈칸]을 도출하고, 이것이 유기체에 어떤 긍정적인 의미를 갖는지 설명하며 글을 마무리합니다.", "answer": "결론" }
+            }
+          ]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const segmentationContainer = document.getElementById('segmentation-container');
+            const instructionEl = document.getElementById('segmentation-instruction');
+            const textContainer = document.getElementById('text-container');
+            const feedbackEl = document.getElementById('segmentation-feedback');
+            const analysisContainer = document.getElementById('analysis-container');
+            const analysisTasksContainer = document.getElementById('analysis-tasks-container');
+
+            let currentSegmentIndex = 0;
+            const correctBoundaries = data.segmentationTask.correctEndSentences;
+            
+            function initializeSegmentation() {
+                instructionEl.textContent = data.segmentationTask.instruction;
+                
+                const sentences = data.fullText.match(/[^.!?]+[.!?]*/g) || [];
+                let reconstructedSentences = [];
+                let currentSentence = "";
+                sentences.forEach(s => {
+                    // Handle cases like "— more probably," which might not be a full sentence.
+                    if (s.trim().startsWith('—') || currentSentence.endsWith('—')) {
+                         currentSentence += " " + s.trim();
+                    } else {
+                        if(currentSentence) reconstructedSentences.push(currentSentence.trim());
+                        currentSentence = s.trim();
+                    }
+                });
+                if(currentSentence) reconstructedSentences.push(currentSentence.trim());
+                
+                reconstructedSentences.forEach(sentenceText => {
+                    const span = document.createElement('span');
+                    span.textContent = sentenceText + ' ';
+                    span.classList.add('sentence');
+                    span.onclick = handleSentenceClick;
+                    textContainer.appendChild(span);
+                });
+            }
+
+            function handleSentenceClick(event) {
+                const clickedSentence = event.target.textContent.trim();
+                if (clickedSentence === correctBoundaries[currentSegmentIndex]) {
+                    event.target.classList.add('selected-boundary');
+                    event.target.classList.add('segment-divider');
+                    event.target.onclick = null; // Disable further clicks
+                    event.target.style.cursor = 'default';
+
+                    currentSegmentIndex++;
+                    feedbackEl.textContent = '정확합니다! 다음 영역을 나눠보세요.';
+                    feedbackEl.className = 'text-center mt-4 h-6 text-lg font-medium feedback-correct';
+
+                    if (currentSegmentIndex >= correctBoundaries.length) {
+                        feedbackEl.textContent = '모든 문단을 성공적으로 나누었습니다!';
+                        setTimeout(() => {
+                            segmentationContainer.classList.add('hidden');
+                            analysisContainer.classList.remove('hidden');
+                            initializeAnalysis();
+                        }, 1500);
+                    }
+                } else {
+                    feedbackEl.textContent = '틀렸습니다. 다시 시도해 보세요.';
+                    feedbackEl.className = 'text-center mt-4 h-6 text-lg font-medium feedback-incorrect';
+                    event.target.classList.add('shake');
+                    setTimeout(() => {
+                        event.target.classList.remove('shake');
+                    }, 500);
+                }
+            }
+
+            function initializeAnalysis() {
+                data.analysisTasks.forEach(task => {
+                    const taskEl = document.createElement('div');
+                    taskEl.className = 'border rounded-xl p-6 bg-gray-50';
+                    
+                    const formattedQuestion = (q) => q.replace(/\[빈칸\]/g, `<input type="text" class="w-24 sm:w-32 mx-1 p-1 border-b-2 border-gray-300 focus:border-blue-500 outline-none bg-transparent">`).replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-blue-600">$1</strong>');
+
+                    taskEl.innerHTML = `
+                        <div class="mb-4">
+                            <span class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full mb-2">Part ${task.partNumber}</span>
+                            <p class="text-gray-600 leading-relaxed">${task.partText}</p>
+                        </div>
+                        <div class="space-y-4 mt-6">
+                            <div class="main-idea-question">
+                                <label class="block text-gray-700 font-medium">${formattedQuestion(task.mainIdea.question)}</label>
+                                <span class="feedback-span text-sm font-medium ml-2"></span>
+                            </div>
+                            <div class="role-question">
+                                <label class="block text-gray-700 font-medium">${formattedQuestion(task.role.question)}</label>
+                                <span class="feedback-span text-sm font-medium ml-2"></span>
+                            </div>
+                        </div>
+                        <div class="text-right mt-4">
+                            <button class="check-btn bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">정답 확인</button>
+                        </div>
+                    `;
+                    
+                    const checkBtn = taskEl.querySelector('.check-btn');
+                    checkBtn.addEventListener('click', () => {
+                        const mainIdeaInput = taskEl.querySelector('.main-idea-question input');
+                        const mainIdeaFeedback = taskEl.querySelector('.main-idea-question .feedback-span');
+                        const roleInput = taskEl.querySelector('.role-question input');
+                        const roleFeedback = taskEl.querySelector('.role-question .feedback-span');
+
+                        checkAnswer(mainIdeaInput, task.mainIdea.answer, mainIdeaFeedback);
+                        checkAnswer(roleInput, task.role.answer, roleFeedback);
+                    });
+
+                    analysisTasksContainer.appendChild(taskEl);
+                });
+            }
+
+            function checkAnswer(inputEl, correctAnswer, feedbackEl) {
+                const userAnswer = inputEl.value.trim();
+                // Simple check for correctness, allows for some flexibility
+                if (userAnswer && correctAnswer.includes(userAnswer)) {
+                    feedbackEl.textContent = '✓ 정답';
+                    feedbackEl.className = 'feedback-span text-sm font-medium ml-2 feedback-correct';
+                    inputEl.style.borderColor = '#16a34a'; // green
+                } else {
+                    feedbackEl.textContent = '✗ 오답 (정답: ' + correctAnswer + ')';
+                    feedbackEl.className = 'feedback-span text-sm font-medium ml-2 feedback-incorrect';
+                     inputEl.style.borderColor = '#dc2626'; // red
+                }
+            }
+
+            initializeSegmentation();
+        });
+    </script>
+</body>
+</html>

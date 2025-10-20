@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>원문제 풀이</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        /* 선택되었을 때의 스타일 */
+        .selected {
+            border-color: #3b82f6 !important;
+            background-color: #eff6ff !important;
+            color: #1e40af !important;
+        }
+        .correct {
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+            color: #15803d !important;
+        }
+        .incorrect {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #b91c1c !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div id="quiz-container" class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 md:p-8">
+        <!-- 퀴즈 내용이 여기에 동적으로 삽입됩니다. -->
+    </div>
+
+    <script>
+        // h220251029oq.json 파일의 데이터를 여기에 붙여넣습니다.
+        const quizData = {
+          "pageId": "h220251029oq",
+          "questionTitle": "고2 2025년 10월 전국연합 29번",
+          "questionInstruction": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+          "passage": "When a cell divides, the genomes of its two daughters are often not quite ① <u>identical</u> to each other or to that of the parent cell. On rare occasions, the error may represent a change for the better — more ② <u>probably</u>, it will cause no significant difference in the cell’s prospects. But in some cases, the error will cause serious damage — for example, by disrupting the coding sequence for a key protein. Changes due to mistakes of the first type will tend to be perpetuated, because the altered cell has an increased likelihood of reproducing ③ <u>itself</u>. Changes due to mistakes of the second type — neutral changes — may be perpetuated or not: it is a matter of chance whether the altered cell or its cousins will succeed. But changes that cause serious damage ④ <u>lead</u> nowhere: the cell that suffers them dies, leaving no progeny. Through endless repetition of this cycle of mutation and natural selection organisms evolve: their genetic specifications change, sometimes ⑤ <u>give</u> organisms new ways to exploit the environment more effectively, to survive in competition with others, and to reproduce successfully.",
+          "options": [
+            { "number": 1, "text": "identical", "isCorrect": false },
+            { "number": 2, "text": "probably", "isCorrect": false },
+            { "number": 3, "text": "itself", "isCorrect": false },
+            { "number": 4, "text": "lead", "isCorrect": false },
+            { "number": 5, "text": "give", "isCorrect": true }
+          ],
+          "answer": {
+            "correctOptionNumber": 5,
+            "rationale": "이 문장의 주된 구조는 'their genetic specifications change'라는 완전한 절입니다. 콤마(,) 뒤에 또 다른 동사 원형(give)이 오려면 접속사가 필요합니다. 문맥상 '유전적 명세가 변해서, 그 결과 새로운 방식을 준다'는 의미이므로, 앞선 절을 부연 설명하는 분사구문 'giving'으로 고쳐야 어법에 맞습니다."
+          }
+        };
+
+        // 페이지가 로드될 때 퀴즈를 화면에 그리는 함수
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+
+            // 1. 헤더 (문제 제목, 지시문) 생성
+            const header = `
+                <div class="border-b pb-4 mb-4">
+                    <h1 class="text-2xl font-bold text-gray-800">${quizData.questionTitle}</h1>
+                    <p class="mt-2 text-md text-gray-600">${quizData.questionInstruction}</p>
+                </div>
+            `;
+
+            // 2. 지문 생성
+            const passage = `<div class="bg-gray-50 p-4 rounded-lg text-gray-700 leading-relaxed">${quizData.passage}</div>`;
+
+            // 3. 선택지 버튼들 생성
+            const options = quizData.options.map(option => `
+                <button 
+                    onclick="checkAnswer(${option.number}, ${option.isCorrect})"
+                    class="w-full text-left p-4 my-2 border-2 border-gray-200 rounded-lg hover:bg-gray-100 hover:border-blue-400 transition-colors duration-200"
+                    data-option-number="${option.number}"
+                >
+                    <span class="font-bold mr-2">${option.number}.</span>
+                    <span>${option.text}</span>
+                </button>
+            `).join('');
+
+            // 4. 해설 영역 생성 (처음에는 숨겨둠)
+            const rationale = `<div id="rationale-container" class="mt-6 hidden"></div>`;
+
+            container.innerHTML = header + passage + `<div class="my-6">${options}</div>` + rationale;
+        }
+
+        // 선택지를 클릭했을 때 정답을 확인하는 함수
+        function checkAnswer(selectedNumber, isCorrect) {
+            const allOptionButtons = document.querySelectorAll('[data-option-number]');
+            const selectedButton = document.querySelector(`[data-option-number="${selectedNumber}"]`);
+            const rationaleContainer = document.getElementById('rationale-container');
+            
+            // 모든 버튼 비활성화
+            allOptionButtons.forEach(button => {
+                button.disabled = true;
+                button.classList.remove('hover:bg-gray-100', 'hover:border-blue-400');
+            });
+
+            // 정답/오답에 따라 스타일 적용
+            if (isCorrect) {
+                selectedButton.classList.add('correct');
+                rationaleContainer.innerHTML = `
+                    <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-800 p-4 rounded-md">
+                        <h3 class="font-bold">정답입니다! 🎉</h3>
+                        <p class="mt-2">${quizData.answer.rationale}</p>
+                    </div>
+                `;
+            } else {
+                selectedButton.classList.add('incorrect');
+                const correctButton = document.querySelector(`[data-option-number="${quizData.answer.correctOptionNumber}"]`);
+                correctButton.classList.add('correct'); // 실제 정답 표시
+                 rationaleContainer.innerHTML = `
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-800 p-4 rounded-md">
+                        <h3 class="font-bold">아쉽네요. 다시 확인해 보세요.</h3>
+                        <p class="mt-2">${quizData.answer.rationale}</p>
+                    </div>
+                `;
+            }
+
+            // 해설 영역을 보여줌
+            rationaleContainer.classList.remove('hidden');
+        }
+
+        // 페이지가 처음 열릴 때 퀴즈 렌더링 함수 실행
+        document.addEventListener('DOMContentLoaded', renderQuiz);
+    </script>
+
+</body>
+</html>
