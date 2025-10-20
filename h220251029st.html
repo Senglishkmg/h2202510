@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>에스 독해법 연습</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- PDF 저장을 위한 라이브러리 추가 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .diff-correct {
+            background-color: #dcfce7; /* green-100 */
+            border-radius: 0.25rem;
+            padding: 0 0.2rem;
+            border-bottom: 2px solid #22c55e; /* green-500 */
+        }
+        .diff-incorrect {
+            background-color: #fee2e2; /* red-100 */
+            border-radius: 0.25rem;
+            padding: 0 0.2rem;
+            text-decoration: line-through;
+            text-decoration-color: #ef4444; /* red-500 */
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #result-container, #result-container * {
+                visibility: visible;
+            }
+            #result-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white w-full max-w-4xl rounded-xl shadow-lg p-6 md:p-8 transition-all duration-500">
+        
+        <!-- 문제 풀이 영역 -->
+        <div id="problem-container">
+            <!-- 데이터가 여기에 동적으로 삽입됩니다. -->
+        </div>
+
+        <!-- 결과 표시 영역 -->
+        <div id="result-container" class="hidden mt-8">
+             <div class="border-b pb-3 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">채점 결과</h2>
+                <p class="text-gray-500">입력한 답안과 정답을 비교한 결과입니다.</p>
+            </div>
+            
+            <div id="result-items" class="space-y-6">
+                <!-- 채점 결과 항목들이 여기에 동적으로 추가됩니다. -->
+            </div>
+            
+            <div id="result-buttons" class="flex flex-col md:flex-row gap-3 mt-8 no-print">
+                <button onclick="saveAsPdf()" class="w-full md:w-1/2 bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    PDF로 저장하기
+                </button>
+                 <button onclick="resetQuiz()" class="w-full md:w-1/2 bg-gray-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                    다시 풀기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        const quizData = {
+            "pageId": "h220251029st-full",
+            "instruction": "다음 문장을 에스독해법으로 해석하시오.",
+            "sentences": [
+                {
+                    "sentence": "When a cell divides, the genomes of its two daughters are often not quite identical to each other or to that of the parent cell.",
+                    "correctAnswer": "세포가 분열할 때, / 유전체는 [그것의두 딸 세포의] / 종종완전히 동일하지는 않다 / 서로 / 또는 부모 세포의 그것과."
+                },
+                {
+                    "sentence": "On rare occasions, the error may represent a change for the better — more probably, it will cause no significant difference in the cell’s prospects.",
+                    "correctAnswer": "드문 경우에, / 그 오류는 / 나타낼지도모른다 / 더 나은쪽으로의 변화를 / —더아마도, / 그것은 / 야기할 것이다 / 중요하지않은 차이를 / 그세포의 장래에."
+                },
+                {
+                    "sentence": "But in some cases, the error will cause serious damage — for example, by disrupting the coding sequence for a key protein.",
+                    "correctAnswer": "그러나 어떤 경우에는, / 그 오류는 / 야기할것이다 / 심각한 손상을 / —예를 들어, / 파괴함으로써 / 핵심 단백질의 암호화 서열을."
+                },
+                {
+                    "sentence": "Changes due to mistakes of the first type will tend to be perpetuated, because the altered cell has an increased likelihood of reproducing itself.",
+                    "correctAnswer": "변화는 [첫번째 유형의 실수로 인한] / 영속되는 경향이 있을 것이다, / 왜냐하면 변형된 세포가 / 가지기 때문에 / 증가된가능성을 / [번식할 / 스스로를]."
+                },
+                {
+                    "sentence": "Changes due to mistakes of the second type — neutral changes — may be perpetuated or not: it is a matter of chance whether the altered cell or its cousins will succeed.",
+                    "correctAnswer": "변화는 [두번째 유형의 실수로 인한] / —즉, 중립적인변화는— / 영속될 수도있고 아닐 수도 있다: / 그것은 / 우연의문제이다 / 변형된 세포나그것의 사촌들이 / 성공할지아닐지는."
+                },
+                {
+                    "sentence": "But changes that cause serious damage lead nowhere: the cell that suffers them dies, leaving no progeny.",
+                    "correctAnswer": "그러나 변화는 [야기하는 / 심각한손상을] / 아무런 결과도낳지 못한다: / 세포는 [그것들을 겪는] / 죽는다, / 남기면서 / 어떤자손도."
+                },
+                {
+                    "sentence": "Through endless repetition of this cycle of mutation and natural selection organisms evolve: their genetic specifications change, sometimes giving organisms new ways to exploit the environment more effectively, to survive in competition with others, and to reproduce successfully.",
+                    "correctAnswer": "끝없는 반복을 통해 / 이 순환의 [돌연변이와자연 선택의] / 유기체는 / 진화한다: / 그들의유전적 명세는 / 변한다, / 때때로 주면서 / 유기체에게 / 새로운 방식을 / [활용할 / 환경을 / 더효과적으로], / [생존할 / 다른 것들과의 경쟁에서], / 그리고 [번식할 / 성공적으로]."
+                }
+            ]
+        };
+
+        const problemContainer = document.getElementById('problem-container');
+        const resultContainer = document.getElementById('result-container');
+        let currentSentenceIndex = 0;
+        let studentAnswers = [];
+
+        function renderProblem() {
+            const currentProblem = quizData.sentences[currentSentenceIndex];
+            const isLastProblem = currentSentenceIndex === quizData.sentences.length - 1;
+            const buttonText = isLastProblem ? "제출하고 채점하기" : "다음 문장";
+            
+            problemContainer.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <h1 class="text-2xl font-bold text-gray-800">${quizData.instruction}</h1>
+                    <span class="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">${currentSentenceIndex + 1} / ${quizData.sentences.length}</span>
+                </div>
+                <p class="bg-gray-100 p-4 rounded-lg text-gray-700 my-4 leading-relaxed">${currentProblem.sentence}</p>
+                <textarea id="student-input" class="w-full h-32 p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="이곳에 에스독해법 해석을 입력하세요..."></textarea>
+                <button onclick="submitAnswer()" class="w-full mt-4 bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                    ${buttonText}
+                </button>
+            `;
+            document.getElementById('student-input').focus();
+        }
+        
+        function submitAnswer() {
+            const studentAnswer = document.getElementById('student-input').value;
+            studentAnswers.push(studentAnswer);
+            
+            currentSentenceIndex++;
+
+            if (currentSentenceIndex < quizData.sentences.length) {
+                renderProblem();
+            } else {
+                showFinalResults();
+            }
+        }
+
+        function showFinalResults() {
+            problemContainer.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+            const resultItemsContainer = document.getElementById('result-items');
+            resultItemsContainer.innerHTML = ''; // Clear previous results
+
+            quizData.sentences.forEach((problem, index) => {
+                const { studentHtml, correctHtml } = createDiffHtml(studentAnswers[index], problem.correctAnswer);
+                const resultItem = `
+                    <div class="border p-4 rounded-lg">
+                        <p class="text-sm font-semibold text-gray-500 mb-2">문장 ${index + 1}</p>
+                        <p class="mb-3 text-gray-800">${problem.sentence}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-3 rounded-md">
+                                <h4 class="font-semibold text-gray-700 mb-2">나의 답안</h4>
+                                <p class="whitespace-pre-wrap leading-relaxed">${studentHtml || '(입력 안 함)'}</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-md">
+                                <h4 class="font-semibold text-gray-700 mb-2">정답</h4>
+                                <p class="whitespace-pre-wrap leading-relaxed">${correctHtml}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                resultItemsContainer.innerHTML += resultItem;
+            });
+        }
+
+        function resetQuiz() {
+            currentSentenceIndex = 0;
+            studentAnswers = [];
+            resultContainer.classList.add('hidden');
+            problemContainer.classList.remove('hidden');
+            renderProblem();
+        }
+        
+        function saveAsPdf() {
+            const resultElement = document.getElementById('result-container');
+            const originalTitle = document.title;
+            document.title = 'h220251029st_results'; // PDF 파일명 설정
+
+            // 버튼 숨기기
+            document.getElementById('result-buttons').classList.add('no-print');
+
+            html2canvas(resultElement).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgProps= pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save(`${document.title}.pdf`);
+
+                // 원래대로 복구
+                document.getElementById('result-buttons').classList.remove('no-print');
+                document.title = originalTitle;
+            });
+        }
+
+
+        function createDiffHtml(studentText, correctText) {
+            const studentWords = studentText.split(/(\s+|[/])/);
+            const correctWords = correctText.split(/(\s+|[/])/);
+            
+            let studentHtml = '';
+            let correctHtml = '';
+            
+            const maxLength = Math.max(studentWords.length, correctWords.length);
+
+            for (let i = 0; i < maxLength; i++) {
+                const studentWord = studentWords[i] || '';
+                const correctWord = correctWords[i] || '';
+
+                if (studentWord === correctWord) {
+                    studentHtml += `<span>${escapeHtml(studentWord)}</span>`;
+                    correctHtml += `<span>${escapeHtml(correctWord)}</span>`;
+                } else {
+                    if (studentWord) studentHtml += `<span class="diff-incorrect">${escapeHtml(studentWord)}</span>`;
+                    if (correctWord) correctHtml += `<span class="diff-correct">${escapeHtml(correctWord)}</span>`;
+                }
+            }
+            return { studentHtml, correctHtml };
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        document.addEventListener('DOMContentLoaded', renderProblem);
+    </script>
+
+</body>
+</html>
+
