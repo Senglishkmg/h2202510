@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2. 키워드 분석 워크북 (31번)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    [data-step] { display: none; }
+    [data-step].active { display: block; }
+    .progress-bar-fill { transition: width 0.5s ease-in-out; }
+    .sentence-selectable { cursor: pointer; padding: 2px; border-radius: 4px; transition: background-color 0.2s; }
+    .sentence-selectable:hover { background-color: #dbeafe; }
+</style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 sm:p-6">
+<div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-4xl">
+    <h1 id="page-title" class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 text-center"></h1>
+    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+        <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full progress-bar-fill" style="width: 25%"></div>
+    </div>
+    <div id="workbook-container"></div>
+</div>
+<script>
+    const data = {
+  "pageTitle": "2. 키워드 분석 워크북 (31번)",
+  "fullText": "While convenience and technology are crucial, they are not the only factors driving Gen Z’s financial decisions. This generation is incredibly ① values-driven, and they want to bank with institutions that match their personal beliefs and values. ② Transparency is vital. Gen Z is skeptical of large corporations and institutions that lack accountability. They have grown up in a world where information is freely available, and they expect complete transparency from the brands they support. Banks, for example, must clearly communicate fees, terms, and conditions, as well as how they handle customers’ data. Moreover, ethical banking practices are more ③ important than ever. Gen Z cares about the environment, social justice, and the ethical implications of their financial decisions. They are interested in sustainable investing, supporting businesses that match their values, and ensuring that their money is not being used to fund ④ beneficial practices. Banks that offer socially responsible investment opportunities and are committed to environmental sustainability will ⑤ attract Gen Z’s attention.",
+  "steps": [
+    {
+      "step": 1,
+      "type": "keywordInput",
+      "instruction": "아래 원문을 읽고, 분석지에 제시된 이 글의 핵심 키워드 세 가지를 순서대로 입력하세요.",
+      "answers": [
+        "Z세대의 가치",
+        "투명성과 윤리성",
+        "금융 기관의 대응"
+      ]
+    },
+    {
+      "step": 2,
+      "type": "wordMatching",
+      "instruction": "아래 원문을 참고하여, 각 단어/어구들이 어떤 핵심 키워드에 해당하는지 올바르게 연결하세요.",
+      "keywords": [
+        {
+          "id": "가",
+          "name": "Z세대의 가치"
+        },
+        {
+          "id": "나",
+          "name": "투명성과 윤리성"
+        },
+        {
+          "id": "다",
+          "name": "금융 기관의 대응"
+        }
+      ],
+      "words": [
+        {
+          "id": "가-0",
+          "text": "values-driven",
+          "correctKeywordId": "가"
+        },
+        {
+          "id": "가-1",
+          "text": "personal beliefs and values",
+          "correctKeywordId": "가"
+        },
+        {
+          "id": "가-2",
+          "text": "cares about the environment",
+          "correctKeywordId": "가"
+        },
+        {
+          "id": "가-3",
+          "text": "social justice",
+          "correctKeywordId": "가"
+        },
+        {
+          "id": "나-0",
+          "text": "Transparency",
+          "correctKeywordId": "나"
+        },
+        {
+          "id": "나-1",
+          "text": "accountability",
+          "correctKeywordId": "나"
+        },
+        {
+          "id": "나-2",
+          "text": "ethical banking practices",
+          "correctKeywordId": "나"
+        },
+        {
+          "id": "나-3",
+          "text": "ethical implications",
+          "correctKeywordId": "나"
+        },
+        {
+          "id": "나-4",
+          "text": "socially responsible",
+          "correctKeywordId": "나"
+        },
+        {
+          "id": "나-5",
+          "text": "environmental sustainability",
+          "correctKeywordId": "나"
+        },
+        {
+          "id": "다-0",
+          "text": "bank with institutions",
+          "correctKeywordId": "다"
+        },
+        {
+          "id": "다-1",
+          "text": "Banks",
+          "correctKeywordId": "다"
+        },
+        {
+          "id": "다-2",
+          "text": "socially responsible investment opportunities",
+          "correctKeywordId": "다"
+        },
+        {
+          "id": "다-3",
+          "text": "attract Gen Z’s attention",
+          "correctKeywordId": "다"
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "type": "sentenceSelection",
+      "instruction": "아래 원문에서 분석지가 '중심 문장'으로 꼽은 문장을 클릭하세요.",
+      "correctSentence": "This generation is incredibly values-driven, and they want to bank with institutions that match their personal beliefs and values."
+    },
+    {
+      "step": 4,
+      "type": "topicCompletion",
+      "instruction": "분석지에서 제시된 주제의 빈칸에 알맞은 단어를 한국어와 영어로 각각 입력하세요.",
+      "topics": [
+        {
+          "id": 1,
+          "koreanTemplate": "[빈칸1]와 [빈칸2]을 통한 유기체의 [빈칸3] 과정",
+          "englishTemplate": "The Process of Organism [빈칸3] Through [빈칸1] and [빈칸2]",
+          "answers": [
+            {
+              "id": 1,
+              "korean": "Z세대의",
+              "english": "Mutation"
+            },
+            {
+              "id": 2,
+              "korean": "투명성과 윤리성",
+              "english": "Natural Selection"
+            },
+            {
+              "id": 3,
+              "korean": "금융 기관의 대응",
+              "english": "Evolution"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "koreanTemplate": "[빈칸1]가 [빈칸2]과 [빈칸3]에 미치는 영향",
+          "englishTemplate": "The Impact of Cell [빈칸1] on [빈칸2] and [빈칸3]",
+          "answers": [
+            {
+              "id": 1,
+              "korean": "세포 복제 오류",
+              "english": "Replication Errors"
+            },
+            {
+              "id": 2,
+              "korean": "생존",
+              "english": "Survival"
+            },
+            {
+              "id": 3,
+              "korean": "진화",
+              "english": "Evolution"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+    let currentStep = 1;
+    let userAnswers = {};
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('page-title').textContent = data.pageTitle;
+        renderStep(currentStep);
+    });
+
+    function renderStep(stepNumber) {
+        const stepData = data.steps.find(s => s.step === stepNumber);
+        if (!stepData) return;
+        const container = document.getElementById('workbook-container');
+        container.innerHTML = '';
+        const stepDiv = document.createElement('div');
+        stepDiv.dataset.step = stepNumber;
+        stepDiv.classList.add('active', 'p-4', 'border', 'rounded-lg', 'bg-gray-50');
+        let contentHTML = `<p class="text-lg text-center text-blue-800 p-4 rounded-lg mb-6">${stepNumber}단계: ${stepData.instruction}</p>`;
+        if (stepData.type !== 'sentenceSelection') {
+            contentHTML += `<div class="mb-6 p-4 border rounded-lg bg-white text-gray-700 leading-relaxed max-h-48 overflow-y-auto"><h3 class="font-semibold mb-2 text-gray-800">지문 원문</h3><p>${data.fullText}</p></div>`;
+        }
+        switch (stepData.type) {
+            case 'keywordInput':
+                contentHTML += `<div class="space-y-4 max-w-lg mx-auto">${stepData.answers.map((_, i) => `<input type="text" placeholder="키워드 ${i + 1}" class="w-full p-3 border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-blue-500">`).join('')}</div><div class="text-center mt-6"><button onclick="processStep1(this)" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition-colors">제출하고 결과보기</button></div>`;
+                break;
+            case 'wordMatching':
+                contentHTML += `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">${stepData.words.map(word => `<div class="flex items-center justify-between p-3 bg-white border rounded-lg"><span class="font-semibold text-gray-700">${word.text}</span><select data-word-id="${word.id}" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"><option value="">선택</option>${stepData.keywords.map(kw => `<option value="${kw.id}">${kw.name}</option>`).join('')}</select></div>`).join('')}</div><div class="text-center mt-6"><button onclick="processStep2(this)" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition-colors">제출하고 결과보기</button></div>`;
+                break;
+            case 'sentenceSelection':
+                const sentences = data.fullText.match(/[^.!?]+[.!?]*/g) || [];
+                contentHTML += `<div id="sentence-container" class="text-gray-700 leading-relaxed text-lg p-4 border rounded-lg bg-white">${sentences.map(s => `<span class="sentence-selectable" onclick="processStep3(this)">${s.trim()} </span>`).join('')}</div>`;
+                break;
+            case 'topicCompletion':
+                contentHTML += '<div class="space-y-8 max-w-3xl mx-auto">';
+                stepData.topics.forEach((topic, topicIndex) => {
+                    let korTemplate = topic.koreanTemplate;
+                    let engTemplate = topic.englishTemplate;
+                    topic.answers.forEach(ans => {
+                        korTemplate = korTemplate.replace(`[빈칸${ans.id}]`, `<input type="text" data-topic="${topicIndex}" data-lang="kor" data-id="${ans.id}" class="w-32 mx-1 p-1 text-center border-b-2 border-gray-300 focus:border-blue-500 outline-none bg-transparent">`);
+                        engTemplate = engTemplate.replace(`[빈칸${ans.id}]`, `<input type="text" data-topic="${topicIndex}" data-lang="eng" data-id="${ans.id}" class="w-40 mx-1 p-1 text-center border-b-2 border-gray-300 focus:border-blue-500 outline-none bg-transparent">`);
+                    });
+                    contentHTML += `<div class="p-4 border rounded-lg bg-white"><p class="text-lg font-medium text-gray-800 mb-3">${korTemplate}</p><p class="text-lg font-medium text-gray-800">${engTemplate}</p></div>`;
+                });
+                contentHTML += `</div><div class="text-center mt-6"><button onclick="processStep4(this)" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition-colors">제출하고 결과보기</button></div>`;
+                break;
+        }
+        stepDiv.innerHTML = contentHTML;
+        container.appendChild(stepDiv);
+    }
+
+    function goToNextStep() {
+        currentStep++;
+        if (currentStep > data.steps.length) {
+            document.getElementById('workbook-container').innerHTML = '<div class="text-center p-10"><h2 class="text-3xl font-bold text-green-600">모든 학습 완료!</h2><p class="text-xl mt-4 text-gray-700">수고하셨습니다. 키워드 분석을 완벽하게 마쳤습니다.</p></div>';
+            document.getElementById('progress-bar').style.width = '100%';
+        } else {
+            document.getElementById('progress-bar').style.width = `${(currentStep / data.steps.length) * 100}%`;
+            renderStep(currentStep);
+        }
+    }
+
+    function createResultView(stepContainer, resultsHTML, onSave) {
+        stepContainer.innerHTML = resultsHTML + `<div class="text-center mt-6 space-x-4"><button class="bg-gray-700 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-800 transition-colors">결과 저장하기</button><button class="bg-green-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-green-700 transition-colors">다음 단계로 →</button></div>`;
+        stepContainer.querySelector('.bg-gray-700').onclick = onSave;
+        stepContainer.querySelector('.bg-green-600').onclick = goToNextStep;
+    }
+
+    function processStep1(button) {
+        const stepContainer = button.closest('[data-step="1"]');
+        const inputs = stepContainer.querySelectorAll('input');
+        const answers = data.steps[0].answers;
+        userAnswers.step1 = Array.from(inputs).map(input => input.value.trim());
+        let resultsContent = `<p class="text-lg text-center text-blue-800 p-4 rounded-lg mb-6">1단계: 결과 확인</p><div class="space-y-4">`;
+        userAnswers.step1.forEach((userAnswer, i) => {
+            const correctAnswer = answers[i];
+            const isCorrect = userAnswer.replace(/[() ]/g, '') === correctAnswer.replace(/[() ]/g, '');
+            resultsContent += `<div class="p-4 border rounded-lg ${isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}"><p class="text-sm font-semibold text-gray-500">키워드 ${i + 1}</p><p class="mt-2"><span class="font-bold">입력한 답:</span> ${userAnswer || '(입력 안함)'}</p><p class="mt-1"><span class="font-bold">정답:</span> ${correctAnswer}</p></div>`;
+        });
+        resultsContent += `</div>`;
+        createResultView(stepContainer, resultsContent, saveStep1Results);
+    }
+    function saveStep1Results() { downloadFile(`키워드 분석 워크북 (31번) - 1단계 결과\n========================================\n\n${userAnswers.step1.map((ua, i) => `키워드 ${i + 1}\n  - 입력한 답: ${ua || '(입력 안함)'}\n  - 정답: ${data.steps[0].answers[i]}\n\n`).join('')}`, 'h2251031ka_step1_results.txt'); }
+
+    function processStep2(button) {
+        const stepContainer = button.closest('[data-step="2"]');
+        const selects = stepContainer.querySelectorAll('select');
+        const wordsData = data.steps[1].words;
+        const keywordsMap = new Map(data.steps[1].keywords.map(k => [k.id, k.name]));
+        userAnswers.step2 = Array.from(selects).map(select => {
+            const wordId = select.dataset.wordId;
+            const wordInfo = wordsData.find(w => w.id === wordId);
+            const userAnswerId = select.value;
+            const correctAnswerId = wordInfo.correctKeywordId;
+            return { word: wordInfo.text, userAnswer: keywordsMap.get(userAnswerId) || '(선택 안함)', correctAnswer: keywordsMap.get(correctAnswerId), isCorrect: userAnswerId === correctAnswerId };
+        });
+        let resultsContent = `<p class="text-lg text-center text-blue-800 p-4 rounded-lg mb-6">2단계: 결과 확인</p><div class="space-y-4">`;
+        userAnswers.step2.forEach(res => {
+            resultsContent += `<div class="p-4 border rounded-lg ${res.isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}"><p class="font-semibold text-gray-800">${res.word}</p><p class="mt-2"><span class="font-bold">선택한 답:</span> ${res.userAnswer}</p>${!res.isCorrect ? `<p class="mt-1"><span class="font-bold">정답:</span> ${res.correctAnswer}</p>` : ''}</div>`;
+        });
+        resultsContent += `</div>`;
+        createResultView(stepContainer, resultsContent, saveStep2Results);
+    }
+    function saveStep2Results() { downloadFile(`키워드 분석 워크북 (31번) - 2단계 결과\n========================================\n\n${userAnswers.step2.map(res => `단어/어구: ${res.word}\n  - 선택한 답: ${res.userAnswer}\n  - 정답: ${res.correctAnswer}\n  - 채점: ${res.isCorrect ? '정답' : '오답'}\n\n`).join('')}`, 'h2251031ka_step2_results.txt'); }
+
+    function processStep3(element) {
+        const stepContainer = element.closest('[data-step="3"]');
+        const clickedSentence = element.textContent.trim();
+        const correctSentence = data.steps[2].correctSentence;
+        userAnswers.step3 = { userAnswer: clickedSentence, correctAnswer: correctSentence, isCorrect: clickedSentence === correctSentence };
+        let resultsContent = `<p class="text-lg text-center text-blue-800 p-4 rounded-lg mb-6">3단계: 결과 확인</p><div class="space-y-4"><div class="p-4 border rounded-lg ${userAnswers.step3.isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}"><p class="font-semibold text-gray-800">선택한 문장:</p><p class="mt-1 italic text-gray-600">"${userAnswers.step3.userAnswer}"</p></div>`;
+        if (!userAnswers.step3.isCorrect) {
+            resultsContent += `<div class="p-4 border rounded-lg bg-blue-50 border-blue-200"><p class="font-semibold text-gray-800">정답 문장:</p><p class="mt-1 italic text-gray-600">"${userAnswers.step3.correctAnswer}"</p></div>`;
+        }
+        resultsContent += `</div>`;
+        createResultView(stepContainer, resultsContent, saveStep3Results);
+    }
+    function saveStep3Results() { downloadFile(`키워드 분석 워크북 (31번) - 3단계 결과\n========================================\n\n선택한 문장:\n  - "${userAnswers.step3.userAnswer}"\n\n정답 문장:\n  - "${userAnswers.step3.correctAnswer}"\n\n채점: ${userAnswers.step3.isCorrect ? '정답' : '오답'}\n`, 'h2251031ka_step3_results.txt'); }
+    
+    function processStep4(button) {
+        const stepContainer = button.closest('[data-step="4"]');
+        const topicsData = data.steps[3].topics;
+        userAnswers.step4 = [];
+        let resultsContent = `<p class="text-lg text-center text-blue-800 p-4 rounded-lg mb-6">4단계: 결과 확인</p><div class="space-y-6">`;
+        topicsData.forEach((topic, topicIndex) => {
+            const topicResult = { topicId: topic.id, answers: [] };
+            resultsContent += `<div class="p-4 border rounded-lg bg-white"><p class="font-semibold mb-3 text-lg">주제 ${topic.id}</p>`;
+            topic.answers.forEach(answer => {
+                const korInput = stepContainer.querySelector(`input[data-topic="${topicIndex}"][data-lang="kor"][data-id="${answer.id}"]`);
+                const engInput = stepContainer.querySelector(`input[data-topic="${topicIndex}"][data-lang="eng"][data-id="${answer.id}"]`);
+                const userKor = korInput.value.trim();
+                const userEng = engInput.value.trim();
+                const isKorCorrect = userKor === answer.korean;
+                const isEngCorrect = userEng.toLowerCase() === answer.english.toLowerCase();
+                topicResult.answers.push({ id: answer.id, userKor, userEng, correctKor: answer.korean, correctEng: answer.english });
+                resultsContent += `<div class="mb-2 pl-4 border-l-4 ${isKorCorrect && isEngCorrect ? 'border-green-400' : 'border-red-400'}"><p><span class="font-bold">입력 (한글):</span> ${userKor || '미입력'} ${isKorCorrect ? '✔' : `(정답: ${answer.korean})`}</p><p><span class="font-bold">입력 (영어):</span> ${userEng || '미입력'} ${isEngCorrect ? '✔' : `(정답: ${answer.english})`}</p></div>`;
+            });
+            resultsContent += `</div>`;
+            userAnswers.step4.push(topicResult);
+        });
+        resultsContent += `</div>`;
+        createResultView(stepContainer, resultsContent, saveStep4Results);
+    }
+    function saveStep4Results() { downloadFile(`키워드 분석 워크북 (31번) - 4단계 결과\n========================================\n\n${userAnswers.step4.map(topicResult => `--- 주제 ${topicResult.topicId} ---\n${topicResult.answers.map(ans => `  빈칸 ${ans.id}:\n    - 한글 입력: ${ans.userKor || '미입력'} (정답: ${ans.correctKor})\n    - 영어 입력: ${ans.userEng || '미입력'} (정답: ${ans.correctEng})\n`).join('')}\n`).join('')}`, 'h2251031ka_step4_results.txt'); }
+
+    function downloadFile(content, fileName) {
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    }
+</script>
+</body>
+</html>

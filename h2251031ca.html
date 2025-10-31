@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5. 연결어 분석 워크북 (31번)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style> body { font-family: 'Inter', sans-serif; } </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 sm:p-6">
+<div id="workbook-container" class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-4xl"></div>
+<script>
+    const data = {
+  "pageTitle": "5. 연결어 분석 워크북 (31번)",
+  "instruction": "아래 지문의 빈칸에 들어갈 가장 적절한 연결어를 보기에서 고르세요.",
+  "textParts": [
+    "",
+    "convenience and technology are crucial, they are not the only factors driving Gen Z’s financial decisions. This generation is incredibly ① values-driven, and they want to bank with institutions that match their personal beliefs and values. ② Transparency is vital. Gen Z is skeptical of large corporations and institutions that lack accountability. They have grown up in a world where information is freely available, and they expect complete transparency from the brands they support. Banks,",
+    ", must clearly communicate fees, terms, and conditions, as well as how they handle customers’ data.",
+    ", ethical banking practices are more ③ important than ever. Gen Z cares about the environment, social justice, and the ethical implications of their financial decisions. They are interested in sustainable investing, supporting businesses that match their values, and ensuring that their money is not being used to fund ④ beneficial practices. Banks that offer socially responsible investment opportunities and are committed to environmental sustainability will ⑤ attract Gen Z’s attention."
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "options": [
+        "While",
+        "Therefore",
+        "Moreover"
+      ],
+      "answer": "While"
+    },
+    {
+      "id": 2,
+      "options": [
+        "for example",
+        "Moreover",
+        "Therefore"
+      ],
+      "answer": "for example"
+    },
+    {
+      "id": 3,
+      "options": [
+        "Therefore",
+        "Moreover",
+        "Moreover"
+      ],
+      "answer": "Moreover"
+    }
+  ]
+};
+    let userAnswers = {};
+
+    function renderQuiz() {
+        const container = document.getElementById('workbook-container');
+        let contentHTML = `<h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 text-center border-b pb-4">${data.pageTitle}</h1><p class="text-lg text-center bg-blue-50 text-blue-800 p-4 rounded-lg mb-6">${data.instruction}</p><div id="quiz-content" class="text-gray-700 leading-relaxed text-lg p-4 border rounded-lg bg-gray-50 space-y-4">`;
+        data.textParts.forEach((part, index) => {
+            contentHTML += `<p>${part}</p>`;
+            if (index < data.questions.length) {
+                const question = data.questions[index];
+                contentHTML += `<div class="inline-block"><select id="q-${question.id}" class="p-2 border-2 border-blue-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg font-semibold"><option value="">[빈칸 ${question.id}]</option>${question.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}</select></div>`;
+            }
+        });
+        contentHTML += `</div><div class="text-center mt-8"><button onclick="processResults()" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition-colors">제출하고 결과보기</button></div>`;
+        container.innerHTML = contentHTML;
+    }
+
+    function processResults() {
+        userAnswers = {};
+        data.questions.forEach(q => {
+            const select = document.getElementById(`q-${q.id}`);
+            userAnswers[q.id] = { userAnswer: select.value, correctAnswer: q.answer, isCorrect: select.value === q.answer };
+        });
+        let resultsHTML = `<h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 text-center border-b pb-4">결과 확인</h1><div class="space-y-4">`;
+        data.questions.forEach(q => {
+            const result = userAnswers[q.id];
+            resultsHTML += `<div class="p-4 border rounded-lg ${result.isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}"><p class="text-sm font-semibold text-gray-500">빈칸 ${q.id}</p><p class="mt-2"><span class="font-bold">선택한 답:</span> ${result.userAnswer || '(선택 안함)'}</p>${!result.isCorrect ? `<p class="mt-1"><span class="font-bold">정답:</span> ${result.correctAnswer}</p>` : ''}</div>`;
+        });
+        resultsHTML += `</div><div class="text-center mt-8 space-x-4"><button onclick="saveResults()" class="bg-gray-700 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-800 transition-colors">결과 저장하기</button><button onclick="location.reload()" class="bg-green-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-green-700 transition-colors">다시 풀기</button></div>`;
+        document.getElementById('workbook-container').innerHTML = resultsHTML;
+    }
+
+    function saveResults() {
+        let textContent = `${data.pageTitle} - 결과\n========================================\n\n`;
+        data.questions.forEach(q => {
+            const result = userAnswers[q.id];
+            textContent += `빈칸 ${q.id}\n  - 선택한 답: ${result.userAnswer || '(선택 안함)'}\n  - 정답: ${result.correctAnswer}\n  - 채점: ${result.isCorrect ? '정답' : '오답'}\n\n`;
+        });
+        downloadFile(textContent, 'h2251031ca_results.txt');
+    }
+    function downloadFile(content, fileName) {
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    document.addEventListener('DOMContentLoaded', renderQuiz);
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>원문제 풀이 (30번)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .selected { border-color: #3b82f6 !important; background-color: #eff6ff !important; color: #1e40af !important; }
+        .correct { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #b91c1c !important; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<div id="quiz-container" class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 md:p-8"></div>
+<script>
+    const quizData = {
+  "pageId": "h2251030oq",
+  "questionTitle": "고2 2025년 10월 전국연합 30번",
+  "questionInstruction": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+  "passage": "Within liberal culture, the value of fair equality of opportunity for individuals ① outweighs the preservation of the family’s integrity. In contrast, for Confucian culture, while seeking fair equality of opportunity for individuals is important, the family assumes a fundamental role in human flourishing, and living within a family institution is considered the ② essential way of life. Individuals are primarily understood as family members before they are regarded as state citizens. Therefore, for Confucians, the family possesses inherent value that should never be ③ abandoned, even if it results in certain societal inequalities. Some cultures, like the liberal one, may choose to impose increasing ④ restrictions on the role of families and implement more egalitarian government programs for education, healthcare, and other positive rights in society in the pursuit of fair equality of opportunity. On the other hand, other cultures, like the Confucian one, may prefer to primarily assign welfare responsibilities to the family, ⑤ rejecting inequalities stemming from the existence of the family as long as everyone’s basic freedoms and rights are safeguarded in the state.",
+  "options": [
+    {
+      "number": 1,
+      "text": "outweighs",
+      "isCorrect": false
+    },
+    {
+      "number": 2,
+      "text": "essential",
+      "isCorrect": false
+    },
+    {
+      "number": 3,
+      "text": "abandoned",
+      "isCorrect": false
+    },
+    {
+      "number": 4,
+      "text": "restrictions",
+      "isCorrect": false
+    },
+    {
+      "number": 5,
+      "text": "rejecting",
+      "isCorrect": true
+    }
+  ],
+  "answer": {
+    "correctOptionNumber": 5,
+    "rationale": "정답으로 의심되는 ⑤번 단어 rejecting (거부하면서)을 \\'옳다\\'고 가정해 보겠습니다. 이 경우 문장은 \\\"유교 문화는... 가족의 존재로부터 비롯되는 불평등을 거부하면서, 복지 책임을 가족에게 할당하는 것을 선호한다\\\"가 됩니다. 이는 앞서 \\\"유교 문화는 특정 사회적 불평등을 초래하더라도 가족의 내재적 가치를 결코 버려서는 안 된다고 생각한다\\\"는 내용과 정면으로 충돌합니다. 가족에게 책임을 맡기면 필연적으로 불평등이 생길 수 있는데, 그 불평을 \\'거부\\'하면서 동시에 가족에게 책임을 맡긴다는 것은 논리적으로 모순됩니다. rejecting의 반의어인 accepting (받아들이면서)이나 tolerating (용인하면서)을 대신 넣어보겠습니다. 그러면 문장은 \\\"유교 문화는... 가족의 존재로부터 비롯되는 불평등을 받아들이면서, 복지 책임을 주로 가족에게 할당하기를 선호한다\\\"가 됩니다. 이렇게 바꾸니, \\'가족의 가치를 지키기 위해 어느 정도의 사회적 불평등은 감수한다\\'는 유교 문화의 핵심적인 입장과 완벽하게 일치하여 글의 흐름이 매우 자연스러워집니다."
+  }
+};
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        const header = `<div class="border-b pb-4 mb-4"><h1 class="text-2xl font-bold text-gray-800">${quizData.questionTitle}</h1><p class="mt-2 text-md text-gray-600">${quizData.questionInstruction}</p></div>`;
+        const passage = `<div class="bg-gray-50 p-4 rounded-lg text-gray-700 leading-relaxed">${quizData.passage}</div>`;
+        const options = quizData.options.map(option => `
+            <button onclick="checkAnswer(${option.number}, ${option.isCorrect})" class="w-full text-left p-4 my-2 border-2 border-gray-200 rounded-lg hover:bg-gray-100 hover:border-blue-400 transition-colors duration-200" data-option-number="${option.number}">
+                <span class="font-bold mr-2">${option.number}.</span><span>${option.text}</span>
+            </button>`).join('');
+        const rationale = `<div id="rationale-container" class="mt-6 hidden"></div>`;
+        container.innerHTML = header + passage + `<div class="my-6">${options}</div>` + rationale;
+    }
+
+    function checkAnswer(selectedNumber, isCorrect) {
+        const allOptionButtons = document.querySelectorAll('[data-option-number]');
+        const selectedButton = document.querySelector(`[data-option-number="${selectedNumber}"]`);
+        const rationaleContainer = document.getElementById('rationale-container');
+        
+        allOptionButtons.forEach(button => {
+            button.disabled = true;
+            button.classList.remove('hover:bg-gray-100', 'hover:border-blue-400');
+        });
+
+        if (isCorrect) {
+            selectedButton.classList.add('correct');
+            rationaleContainer.innerHTML = `<div class="bg-blue-100 border-l-4 border-blue-500 text-blue-800 p-4 rounded-md"><h3 class="font-bold">정답입니다! 🎉</h3><p class="mt-2">${quizData.answer.rationale}</p></div>`;
+        } else {
+            selectedButton.classList.add('incorrect');
+            const correctButton = document.querySelector(`[data-option-number="${quizData.answer.correctOptionNumber}"]`);
+            correctButton.classList.add('correct');
+            rationaleContainer.innerHTML = `<div class="bg-red-100 border-l-4 border-red-500 text-red-800 p-4 rounded-md"><h3 class="font-bold">아쉽네요. 다시 확인해 보세요.</h3><p class="mt-2">${quizData.answer.rationale}</p></div>`;
+        }
+        rationaleContainer.classList.remove('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', renderQuiz);
+</script>
+</body>
+</html>

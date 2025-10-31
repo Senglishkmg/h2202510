@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>에스 독해법 연습</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .diff-correct { background-color: #dcfce7; border-radius: 0.25rem; padding: 0 0.2rem; border-bottom: 2px solid #22c55e; }
+        .diff-incorrect { background-color: #fee2e2; border-radius: 0.25rem; padding: 0 0.2rem; text-decoration: line-through; text-decoration-color: #ef4444; }
+        @media print {
+            body * { visibility: hidden; }
+            #result-container, #result-container * { visibility: visible; }
+            #result-container { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<div class="bg-white w-full max-w-4xl rounded-xl shadow-lg p-6 md:p-8 transition-all duration-500">
+    <div id="problem-container"></div>
+    <div id="result-container" class="hidden mt-8">
+         <div class="border-b pb-3 mb-6"><h2 class="text-2xl font-bold text-gray-800">채점 결과</h2><p class="text-gray-500">입력한 답안과 정답을 비교한 결과입니다.</p></div>
+        <div id="result-items" class="space-y-6"></div>
+        <div id="result-buttons" class="flex flex-col md:flex-row gap-3 mt-8 no-print">
+            <button onclick="saveAsPdf()" class="w-full md:w-1/2 bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF로 저장하기</button>
+             <button onclick="resetQuiz()" class="w-full md:w-1/2 bg-gray-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>다시 풀기</button>
+        </div>
+    </div>
+</div>
+<script>
+    const { jsPDF } = window.jspdf;
+    const quizData = {
+  "pageId": "h2251031st-full",
+  "instruction": "다음 문장을 에스독해법으로 해석하시오.",
+  "sentences": [
+    {
+      "sentence": "While convenience and technology are crucial, they are not the only factors driving Gen Z’s financial decisions.",
+      "correctAnswer": "비록 편의성과 기술이 중요하지만, / 그것들은 / 유일한 요인은 아니다 / [이끄는 / Z세대의 재정적 결정을]."
+    },
+    {
+      "sentence": "This generation is incredibly values-driven, and they want to bank with institutions that match their personal beliefs and values.",
+      "correctAnswer": "이 세대는 / 엄청나게 가치 중심적이다, / 그리고 그들은 / 원한다 / 은행 거래하기를 / 기관들과 / [일치하는 / 그들의 개인적인 신념 및 가치와]."
+    },
+    {
+      "sentence": "Transparency is vital.",
+      "correctAnswer": "투명성은 / 필수적이다."
+    },
+    {
+      "sentence": "Gen Z is skeptical of large corporations and institutions that lack accountability.",
+      "correctAnswer": "Z세대는 / 회의적이다 / 거대 기업과 기관들에 대해 / [책임감이 부족한]."
+    },
+    {
+      "sentence": "They have grown up in a world where information is freely available, and they expect complete transparency from the brands they support.",
+      "correctAnswer": "그들은 / 자라왔다 / 세상에서 / [정보가 자유롭게 이용 가능한], / 그리고 그들은 / 기대한다 / 완전한 투명성을 / 브랜드로부터 / [그들이 지지하는]."
+    },
+    {
+      "sentence": "Banks, for example, must clearly communicate fees, terms, and conditions, as well as how they handle customers’ data.",
+      "correctAnswer": "은행은, / 예를 들어, / 명확하게 전달해야 한다 / 수수료, 약관, 그리고 조건을, / 그들이 고객의 데이터를 어떻게 다루는지뿐만 아니라"
+    },
+    {
+      "sentence": "Moreover, ethical banking practices are more important than ever.",
+      "correctAnswer": "더욱이, / 윤리적인 은행 관행은 / 더 중요하다 / 그 어느 때보다."
+    },
+    {
+      "sentence": "Gen Z cares about the environment, social justice, and the ethical implications of their financial decisions.",
+      "correctAnswer": "Z세대는 / 신경 쓴다 / 환경, 사회 정의, 그리고 윤리적 영향에 대해 / [그들의 재정적 결정의]."
+    },
+    {
+      "sentence": "They are interested in sustainable investing, supporting businesses that match their values, and ensuring that their money is not being used to fund beneficial practices.",
+      "correctAnswer": "그들은 / 관심이 있다 / 지속 가능한 투자에, / 지지하는 것에 / 사업체들을 [그들의 가치와 일치하는], / 그리고 보장하는 것에 / 그들의 돈이 사용되지 않고 있다는 것을 / 자금을 대기 위해 / 유익한 관행에."
+    },
+    {
+      "sentence": "Banks that offer socially responsible investment opportunities and are committed to environmental sustainability will attract Gen Z’s attention.",
+      "correctAnswer": "은행은 / [제공하는 / 사회적으로 책임 있는 투자 기회를 / 그리고 전념하는 / 환경적 지속 가능성에] / 끌 것이다 / Z세대의 관심을."
+    }
+  ]
+};
+    const problemContainer = document.getElementById('problem-container');
+    const resultContainer = document.getElementById('result-container');
+    let currentSentenceIndex = 0;
+    let studentAnswers = [];
+
+    function renderProblem() {
+        const currentProblem = quizData.sentences[currentSentenceIndex];
+        const isLastProblem = currentSentenceIndex === quizData.sentences.length - 1;
+        const buttonText = isLastProblem ? "제출하고 채점하기" : "다음 문장";
+        problemContainer.innerHTML = `
+            <div class="flex justify-between items-center mb-4"><h1 class="text-2xl font-bold text-gray-800">${quizData.instruction}</h1><span class="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">${currentSentenceIndex + 1} / ${quizData.sentences.length}</span></div>
+            <p class="bg-gray-100 p-4 rounded-lg text-gray-700 my-4 leading-relaxed">${currentProblem.sentence}</p>
+            <textarea id="student-input" class="w-full h-32 p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="이곳에 에스독해법 해석을 입력하세요..."></textarea>
+            <button onclick="submitAnswer()" class="w-full mt-4 bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors">${buttonText}</button>
+        `;
+        document.getElementById('student-input').focus();
+    }
+    
+    function submitAnswer() {
+        const studentAnswer = document.getElementById('student-input').value;
+        studentAnswers.push(studentAnswer);
+        currentSentenceIndex++;
+        if (currentSentenceIndex < quizData.sentences.length) { renderProblem(); } else { showFinalResults(); }
+    }
+
+    function showFinalResults() {
+        problemContainer.classList.add('hidden');
+        resultContainer.classList.remove('hidden');
+        const resultItemsContainer = document.getElementById('result-items');
+        resultItemsContainer.innerHTML = '';
+        quizData.sentences.forEach((problem, index) => {
+            const { studentHtml, correctHtml } = createDiffHtml(studentAnswers[index], problem.correctAnswer);
+            resultItemsContainer.innerHTML += `
+                <div class="border p-4 rounded-lg">
+                    <p class="text-sm font-semibold text-gray-500 mb-2">문장 ${index + 1}</p>
+                    <p class="mb-3 text-gray-800">${problem.sentence}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-3 rounded-md"><h4 class="font-semibold text-gray-700 mb-2">나의 답안</h4><p class="whitespace-pre-wrap leading-relaxed">${studentHtml || '(입력 안 함)'}</p></div>
+                        <div class="bg-gray-50 p-3 rounded-md"><h4 class="font-semibold text-gray-700 mb-2">정답</h4><p class="whitespace-pre-wrap leading-relaxed">${correctHtml}</p></div>
+                    </div>
+                </div>`;
+        });
+    }
+
+    function resetQuiz() {
+        currentSentenceIndex = 0;
+        studentAnswers = [];
+        resultContainer.classList.add('hidden');
+        problemContainer.classList.remove('hidden');
+        renderProblem();
+    }
+    
+    function saveAsPdf() {
+        const resultElement = document.getElementById('result-container');
+        const originalTitle = document.title;
+        document.title = 'h2251031st_results';
+        document.getElementById('result-buttons').classList.add('no-print');
+        html2canvas(resultElement).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`${document.title}.pdf`);
+            document.getElementById('result-buttons').classList.remove('no-print');
+            document.title = originalTitle;
+        });
+    }
+
+    function createDiffHtml(studentText, correctText) {
+        const studentWords = studentText.split(/(\s+|[/])/);
+        const correctWords = correctText.split(/(\s+|[/])/);
+        let studentHtml = '', correctHtml = '';
+        const maxLength = Math.max(studentWords.length, correctWords.length);
+        for (let i = 0; i < maxLength; i++) {
+            const studentWord = studentWords[i] || '';
+            const correctWord = correctWords[i] || '';
+            if (studentWord === correctWord) {
+                studentHtml += `<span>${escapeHtml(studentWord)}</span>`;
+                correctHtml += `<span>${escapeHtml(correctWord)}</span>`;
+            } else {
+                if (studentWord) studentHtml += `<span class="diff-incorrect">${escapeHtml(studentWord)}</span>`;
+                if (correctWord) correctHtml += `<span class="diff-correct">${escapeHtml(correctWord)}</span>`;
+            }
+        }
+        return { studentHtml, correctHtml };
+    }
+
+    function escapeHtml(text) {
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    document.addEventListener('DOMContentLoaded', renderProblem);
+</script>
+</body>
+</html>

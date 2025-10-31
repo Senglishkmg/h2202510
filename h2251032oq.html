@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>원문제 풀이 (32번)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .selected { border-color: #3b82f6 !important; background-color: #eff6ff !important; color: #1e40af !important; }
+        .correct { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #b91c1c !important; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<div id="quiz-container" class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 md:p-8"></div>
+<script>
+    const quizData = {
+  "pageId": "h2251032oq",
+  "questionTitle": "고2 2025년 10월 전국연합 32번",
+  "questionInstruction": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+  "passage": "Just as an expert in the taste and colour of wine will gain much by being aware of the chemistry that underlies those qualities, so each perspective on the body can potentially enhance the others. And yet every scientific tool, from microscopes to mathematics, and every aspect of the body, from the brain to the microorganism, requires such depth of expertise that this tends not to happen: we tend to study the human body in silos, each community sectioned from the others by its own specialised vocabulary. Research communities may be dedicated to one type of scientific tool or a specific component of the body, such as one type of cell. How different types of cell communicate with one another becomes its own specialist topic. Even simple forms of life on Earth are now rarely studied as a whole, and the human body is evidently much more complex. As long ago as 1890, The Times newspaper commented that knowledge ‘had already become too vast to be manageable’. Today, _______________________. [3점]",
+  "options": [
+    {
+      "number": 1,
+      "text": "a whole is as easy to study as its parts",
+      "isCorrect": false
+    },
+    {
+      "number": 2,
+      "text": "nobody is an expert in the whole of anything",
+      "isCorrect": true
+    },
+    {
+      "number": 3,
+      "text": "a single cell speaks for the entire human body",
+      "isCorrect": false
+    },
+    {
+      "number": 4,
+      "text": "modern tools simplify the study of the human body",
+      "isCorrect": false
+    },
+    {
+      "number": 5,
+      "text": "researches across subjects have replaced isolated ones",
+      "isCorrect": false
+    }
+  ],
+  "answer": {
+    "correctOptionNumber": 2,
+    "rationale": "빈칸은 글 전체의 내용을 요약하고 마무리하는 최종 결론의 자리입니다. 글은 지식이 너무 복잡하고 방대해져서(too vast to be manageable) 모든 학문이 잘게 쪼개지고(in silos), 이제는 그 어떤 것도 전체로서(as a whole) 연구되지 않는다고 말하고 있습니다. 따라서 빈칸에는 \\\"이러한 경향이 오늘날에 이르러 어떤 최종적인 상황을 만들었는가\\\"에 대한 내용이 와야 합니다. 이 글의 주제는 \\'지식의 극단적 세분화로 인해 전체를 아우르는 전문가는 더 이상 존재하기 어렵다\\'는 것입니다. 1890년에도 이미 지식이 감당할 수 없을 만큼 방대했다면, 오늘날은 그 상황이 더욱 심화되었을 것입니다. 이 논리적 흐름에 가장 잘 맞는 결론은 \\'오늘날에는 그 누구도 어떤 것의 전체에 대한 전문가가 아니다\\'입니다. 따라서 정답은 ② nobody is an expert in the whole of anything 입니다."
+  }
+};
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        const header = `<div class="border-b pb-4 mb-4"><h1 class="text-2xl font-bold text-gray-800">${quizData.questionTitle}</h1><p class="mt-2 text-md text-gray-600">${quizData.questionInstruction}</p></div>`;
+        const passage = `<div class="bg-gray-50 p-4 rounded-lg text-gray-700 leading-relaxed">${quizData.passage}</div>`;
+        const options = quizData.options.map(option => `
+            <button onclick="checkAnswer(${option.number}, ${option.isCorrect})" class="w-full text-left p-4 my-2 border-2 border-gray-200 rounded-lg hover:bg-gray-100 hover:border-blue-400 transition-colors duration-200" data-option-number="${option.number}">
+                <span class="font-bold mr-2">${option.number}.</span><span>${option.text}</span>
+            </button>`).join('');
+        const rationale = `<div id="rationale-container" class="mt-6 hidden"></div>`;
+        container.innerHTML = header + passage + `<div class="my-6">${options}</div>` + rationale;
+    }
+
+    function checkAnswer(selectedNumber, isCorrect) {
+        const allOptionButtons = document.querySelectorAll('[data-option-number]');
+        const selectedButton = document.querySelector(`[data-option-number="${selectedNumber}"]`);
+        const rationaleContainer = document.getElementById('rationale-container');
+        
+        allOptionButtons.forEach(button => {
+            button.disabled = true;
+            button.classList.remove('hover:bg-gray-100', 'hover:border-blue-400');
+        });
+
+        if (isCorrect) {
+            selectedButton.classList.add('correct');
+            rationaleContainer.innerHTML = `<div class="bg-blue-100 border-l-4 border-blue-500 text-blue-800 p-4 rounded-md"><h3 class="font-bold">정답입니다! 🎉</h3><p class="mt-2">${quizData.answer.rationale}</p></div>`;
+        } else {
+            selectedButton.classList.add('incorrect');
+            const correctButton = document.querySelector(`[data-option-number="${quizData.answer.correctOptionNumber}"]`);
+            correctButton.classList.add('correct');
+            rationaleContainer.innerHTML = `<div class="bg-red-100 border-l-4 border-red-500 text-red-800 p-4 rounded-md"><h3 class="font-bold">아쉽네요. 다시 확인해 보세요.</h3><p class="mt-2">${quizData.answer.rationale}</p></div>`;
+        }
+        rationaleContainer.classList.remove('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', renderQuiz);
+</script>
+</body>
+</html>

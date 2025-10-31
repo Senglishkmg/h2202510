@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>33번 지문 내용 이해 평가</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .option-btn.correct { background-color: #d1fae5; border-color: #10b981; color: #065f46; }
+        .option-btn.incorrect { background-color: #fee2e2; border-color: #f87171; color: #991b1b; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 sm:p-6">
+<div id="quiz-container" class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-3xl"></div>
+<script>
+    const quizData = {
+  "pageTitle": "33번 지문 내용 이해 평가",
+  "instruction": "지문의 내용을 바탕으로, 다음 질문에 가장 적절한 답을 고르세요.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "글의 1번째 부분의 중심 내용으로 가장 적절한 것은?",
+      "options": [
+        {
+          "text": "궁전의 **(가)유리(가시성)**는 (다)상호간의 시선을 통해 통치자와 신하 사이의 (나)권력 관계를 명확히 했다.",
+          "isCorrect": true
+        },
+        {
+          "text": "지문에 언급되지 않은 내용",
+          "isCorrect": false
+        },
+        {
+          "text": "베르사유 궁전의 예시는 (가)유리가 어떻게 왕을 (다)시선의 중심에 놓아 (나)절대 권위를 강화하는지 보여준다.",
+          "isCorrect": false
+        },
+        {
+          "text": "(가)개방된 시야는 (나)감시와 통제를 용이하게 했고, 사람들은 (다)관찰되고 있음을 인지하며 복종적인 태도를 취했다.",
+          "isCorrect": false
+        }
+      ],
+      "rationale": "정답입니다. 1번째 부분은 '궁전의 **(가)유리(가시성)**는 (다)상호간의 시선을 통해 통치자와 신하 사이의 (나)권력 관계를 명확히 했다.'라는 핵심 내용을 다루고 있습니다."
+    },
+    {
+      "id": 2,
+      "question": "글의 2번째 부분의 중심 내용으로 가장 적절한 것은?",
+      "options": [
+        {
+          "text": "궁전의 **(가)유리(가시성)**는 (다)상호간의 시선을 통해 통치자와 신하 사이의 (나)권력 관계를 명확히 했다.",
+          "isCorrect": false
+        },
+        {
+          "text": "베르사유 궁전의 예시는 (가)유리가 어떻게 왕을 (다)시선의 중심에 놓아 (나)절대 권위를 강화하는지 보여준다.",
+          "isCorrect": true
+        },
+        {
+          "text": "지문에 언급되지 않은 내용",
+          "isCorrect": false
+        },
+        {
+          "text": "(가)개방된 시야는 (나)감시와 통제를 용이하게 했고, 사람들은 (다)관찰되고 있음을 인지하며 복종적인 태도를 취했다.",
+          "isCorrect": false
+        }
+      ],
+      "rationale": "정답입니다. 2번째 부분은 '베르사유 궁전의 예시는 (가)유리가 어떻게 왕을 (다)시선의 중심에 놓아 (나)절대 권위를 강화하는지 보여준다.'라는 핵심 내용을 다루고 있습니다."
+    },
+    {
+      "id": 3,
+      "question": "글의 3번째 부분의 중심 내용으로 가장 적절한 것은?",
+      "options": [
+        {
+          "text": "(가)개방된 시야는 (나)감시와 통제를 용이하게 했고, 사람들은 (다)관찰되고 있음을 인지하며 복종적인 태도를 취했다.",
+          "isCorrect": true
+        },
+        {
+          "text": "궁전의 **(가)유리(가시성)**는 (다)상호간의 시선을 통해 통치자와 신하 사이의 (나)권력 관계를 명확히 했다.",
+          "isCorrect": false
+        },
+        {
+          "text": "베르사유 궁전의 예시는 (가)유리가 어떻게 왕을 (다)시선의 중심에 놓아 (나)절대 권위를 강화하는지 보여준다.",
+          "isCorrect": false
+        },
+        {
+          "text": "지문에 언급되지 않은 내용",
+          "isCorrect": false
+        }
+      ],
+      "rationale": "정답입니다. 3번째 부분은 '(가)개방된 시야는 (나)감시와 통제를 용이하게 했고, 사람들은 (다)관찰되고 있음을 인지하며 복종적인 태도를 취했다.'라는 핵심 내용을 다루고 있습니다."
+    }
+  ]
+};
+    let currentQuestionIndex = 0;
+    let userAnswers = [];
+
+    function showQuestion(index) {
+        const container = document.getElementById('quiz-container');
+        const question = quizData.questions[index];
+        container.innerHTML = `
+            <div class="mb-4 text-center"><h1 class="text-2xl sm:text-3xl font-bold text-gray-800">${quizData.pageTitle}</h1><p class="text-gray-500 mt-1">${quizData.instruction}</p></div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 my-6"><div class="bg-blue-600 h-2.5 rounded-full" style="width: ${((index + 1) / quizData.questions.length) * 100}%"></div></div>
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <p class="text-lg font-semibold text-gray-800 mb-5"><span class="text-blue-600 font-bold">Q${question.id}.</span> ${question.question}</p>
+                <div id="options-container" class="space-y-3">${question.options.map((option, i) => `<button class="option-btn w-full text-left p-4 border-2 border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300" onclick="checkAnswer(${i}, this)">${option.text}</button>`).join('')}</div>
+                <div id="rationale-container" class="mt-5"></div>
+            </div>`;
+    }
+    
+    function checkAnswer(selectedIndex, element) {
+        const question = quizData.questions[currentQuestionIndex];
+        const selectedOption = question.options[selectedIndex];
+        userAnswers[currentQuestionIndex] = { question: question.question, selected: selectedOption.text, isCorrect: selectedOption.isCorrect };
+        const options = document.getElementById('options-container').children;
+        Array.from(options).forEach(btn => btn.disabled = true);
+        if(selectedOption.isCorrect){ element.classList.add('correct'); } else {
+            element.classList.add('incorrect');
+            question.options.forEach((opt, i) => { if (opt.isCorrect) { options[i].classList.add('correct'); } });
+        }
+        document.getElementById('rationale-container').innerHTML = `
+            <div class="p-4 rounded-lg ${selectedOption.isCorrect ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}"><p>${question.rationale}</p></div>
+            <div class="text-right mt-4"><button class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700" onclick="nextQuestion()">${currentQuestionIndex < quizData.questions.length - 1 ? '다음 문제' : '결과 보기'}</button></div>`;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.questions.length) { showQuestion(currentQuestionIndex); } else { showResults(); }
+    }
+
+    function showResults() {
+         const container = document.getElementById('quiz-container');
+         const correctCount = userAnswers.filter(a => a.isCorrect).length;
+         container.innerHTML = `
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-gray-800">최종 결과</h1>
+                <p class="text-6xl font-bold my-6 ${correctCount === quizData.questions.length ? 'text-green-500' : 'text-blue-600'}">${correctCount} / ${quizData.questions.length}</p>
+                <p class="text-xl text-gray-600 mb-8">수고하셨습니다. 아래 버튼으로 결과를 저장하거나 다시 풀어보세요.</p>
+                 <div class="text-center mt-8 space-x-4">
+                    <button onclick="saveResults()" class="bg-gray-700 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-800">결과 저장하기</button>
+                    <button onclick="location.reload()" class="bg-green-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-green-700">다시 풀기</button>
+                </div>
+            </div>`;
+    }
+
+    function saveResults() {
+        let textContent = `${quizData.pageTitle} - 결과\n========================================\n\n총 점수: ${userAnswers.filter(a => a.isCorrect).length} / ${quizData.questions.length}\n\n`;
+        userAnswers.forEach((answer, index) => {
+            textContent += `Q${index + 1}. ${answer.question}\n  - 선택한 답: ${answer.selected}\n  - 채점: ${answer.isCorrect ? '정답' : '오답'}\n\n`;
+        });
+        const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'h2251033ct_results.txt';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    document.addEventListener('DOMContentLoaded', () => showQuestion(currentQuestionIndex));
+</script>
+</body>
+</html>

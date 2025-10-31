@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>원문제 풀이 (31번)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .selected { border-color: #3b82f6 !important; background-color: #eff6ff !important; color: #1e40af !important; }
+        .correct { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #b91c1c !important; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<div id="quiz-container" class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 md:p-8"></div>
+<script>
+    const quizData = {
+  "pageId": "h2251031oq",
+  "questionTitle": "고2 2025년 10월 전국연합 31번",
+  "questionInstruction": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+  "passage": "While convenience and technology are crucial, they are not the only factors driving Gen Z’s financial decisions. This generation is incredibly ① values-driven, and they want to bank with institutions that match their personal beliefs and values. ② Transparency is vital. Gen Z is skeptical of large corporations and institutions that lack accountability. They have grown up in a world where information is freely available, and they expect complete transparency from the brands they support. Banks, for example, must clearly communicate fees, terms, and conditions, as well as how they handle customers’ data. Moreover, ethical banking practices are more ③ important than ever. Gen Z cares about the environment, social justice, and the ethical implications of their financial decisions. They are interested in sustainable investing, supporting businesses that match their values, and ensuring that their money is not being used to fund ④ beneficial practices. Banks that offer socially responsible investment opportunities and are committed to environmental sustainability will ⑤ attract Gen Z’s attention.",
+  "options": [
+    {
+      "number": 1,
+      "text": "values-driven",
+      "isCorrect": false
+    },
+    {
+      "number": 2,
+      "text": "Transparency",
+      "isCorrect": false
+    },
+    {
+      "number": 3,
+      "text": "important",
+      "isCorrect": false
+    },
+    {
+      "number": 4,
+      "text": "beneficial",
+      "isCorrect": true
+    },
+    {
+      "number": 5,
+      "text": "attract",
+      "isCorrect": false
+    }
+  ],
+  "answer": {
+    "correctOptionNumber": 4,
+    "rationale": "정답으로 의심되는 ④번 단어 beneficial (유익한, 이로운)을 \\'옳다\\'고 가정해 보겠습니다. 이 경우 문장은 \\\"그들의 돈이 유익한 관행에 자금을 대는 데 사용되지 않도록 보장하는 것에 관심이 있다\\\"가 됩니다. 이는 Z세대가 \\'유익한 일\\'에 자신의 돈이 쓰이는 것을 막고 싶어 한다는 의미가 되어버립니다. 하지만 바로 앞 문장에서 Z세대는 \\'환경, 사회 정의, 지속 가능한 투자\\'에 관심이 있다고 했습니다. 이는 \\'유익한 일\\'에 적극적으로 참여하고 싶어 한다는 뜻이므로, beneficial을 사용한 문장은 전체 문맥과 정면으로 충돌하여 논리적 모순을 일으킵니다. beneficial의 반의어인 harmful (해로운)이나 문맥상 반대 개념인 unethical (비윤리적인)을 대신 넣어보겠습니다. 그러면 문장은 \\\"그들의 돈이 해로운(비윤리적인) 관행에 자금을 대는 데 사용되지 않도록 보장하는 것에 관심이 있다\\\"가 됩니다. 이렇게 바꾸니, 환경과 사회 정의를 중시하는 Z세대가 자신의 돈이 비윤리적이거나 해로운 기업 활동에 쓰이는 것을 원치 않는다는 의미가 되어 글의 흐름이 매우 자연스러워집니다. 이는 Z세대의 \\'가치 중심적\\' 성향과 완벽하게 일치합니다. 위 두 단계를 통해, ④번 beneficial은 문맥상 적절하지 않음을 확인할 수 있습니다. Z세대는 \\'유익한\\' 관행이 아닌 \\'해로운\\' 관행에 자신의 돈이 사용되는 것을 막고 싶어 하므로, 정답은 ④번입니다."
+  }
+};
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        const header = `<div class="border-b pb-4 mb-4"><h1 class="text-2xl font-bold text-gray-800">${quizData.questionTitle}</h1><p class="mt-2 text-md text-gray-600">${quizData.questionInstruction}</p></div>`;
+        const passage = `<div class="bg-gray-50 p-4 rounded-lg text-gray-700 leading-relaxed">${quizData.passage}</div>`;
+        const options = quizData.options.map(option => `
+            <button onclick="checkAnswer(${option.number}, ${option.isCorrect})" class="w-full text-left p-4 my-2 border-2 border-gray-200 rounded-lg hover:bg-gray-100 hover:border-blue-400 transition-colors duration-200" data-option-number="${option.number}">
+                <span class="font-bold mr-2">${option.number}.</span><span>${option.text}</span>
+            </button>`).join('');
+        const rationale = `<div id="rationale-container" class="mt-6 hidden"></div>`;
+        container.innerHTML = header + passage + `<div class="my-6">${options}</div>` + rationale;
+    }
+
+    function checkAnswer(selectedNumber, isCorrect) {
+        const allOptionButtons = document.querySelectorAll('[data-option-number]');
+        const selectedButton = document.querySelector(`[data-option-number="${selectedNumber}"]`);
+        const rationaleContainer = document.getElementById('rationale-container');
+        
+        allOptionButtons.forEach(button => {
+            button.disabled = true;
+            button.classList.remove('hover:bg-gray-100', 'hover:border-blue-400');
+        });
+
+        if (isCorrect) {
+            selectedButton.classList.add('correct');
+            rationaleContainer.innerHTML = `<div class="bg-blue-100 border-l-4 border-blue-500 text-blue-800 p-4 rounded-md"><h3 class="font-bold">정답입니다! 🎉</h3><p class="mt-2">${quizData.answer.rationale}</p></div>`;
+        } else {
+            selectedButton.classList.add('incorrect');
+            const correctButton = document.querySelector(`[data-option-number="${quizData.answer.correctOptionNumber}"]`);
+            correctButton.classList.add('correct');
+            rationaleContainer.innerHTML = `<div class="bg-red-100 border-l-4 border-red-500 text-red-800 p-4 rounded-md"><h3 class="font-bold">아쉽네요. 다시 확인해 보세요.</h3><p class="mt-2">${quizData.answer.rationale}</p></div>`;
+        }
+        rationaleContainer.classList.remove('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', renderQuiz);
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>원문제 풀이 (33번)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .selected { border-color: #3b82f6 !important; background-color: #eff6ff !important; color: #1e40af !important; }
+        .correct { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #15803d !important; }
+        .incorrect { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #b91c1c !important; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<div id="quiz-container" class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 md:p-8"></div>
+<script>
+    const quizData = {
+  "pageId": "h2251033oq",
+  "questionTitle": "고2 2025년 10월 전국연합 33번 분석지",
+  "questionInstruction": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+  "passage": "Historically, palaces weren’t just homes; they were carefully constructed stages designed to impress and intimidate. While stone symbolized permanence and strength, glass offered something equally powerful: visibility. The introduction of large windows in palaces allowed rulers to literally look down upon their subjects, emphasizing their elevated position. Conversely, it also allowed subjects to gaze up at their leaders, creating a sense of awe and distance. Consider the Palace of Versailles: its Hall of Mirrors, lined with reflective surfaces, not only magnified the grandeur of the space but also placed the king at the center of a dazzling display, reinforcing his absolute authority. The use of glass in palaces wasn’t merely aesthetic; it was strategic. Open sightlines allowed for better surveillance and control, ensuring the safety and security of the ruling family. Courtiers and visitors were constantly aware of being observed, contributing to an atmosphere of careful obedience and respect. The very architecture dictated social behavior, with glass _______________________. *surveillance: 감시 **courtier: 신하",
+  "options": [
+    {
+      "number": 1,
+      "text": "acting as a silent enforcer of the power dynamic",
+      "isCorrect": true
+    },
+    {
+      "number": 2,
+      "text": "serving as a tool for a king to reflect on himself",
+      "isCorrect": false
+    },
+    {
+      "number": 3,
+      "text": "opening the king’s eyes to his subjects’ hardships",
+      "isCorrect": false
+    },
+    {
+      "number": 4,
+      "text": "offering the ruler a window and the ruled a mirror",
+      "isCorrect": false
+    },
+    {
+      "number": 5,
+      "text": "representing a bridge between the king and the public",
+      "isCorrect": false
+    }
+  ],
+  "answer": {
+    "correctOptionNumber": 1,
+    "rationale": "빈칸은 with glass ... 형태의 with 분사구문 안에 있습니다. with + 명사(glass) + 분사의 구조로, 빈칸에는 현재분사구(~ing ...)가 와서 유리가 어떤 역할을 \\'하면서\\' 건축이 사회적 행동을 지시했는지를 설명해야 합니다. 빈칸이 포함된 문장은 \\\"바로 그 건축 양식이 사회적 행동을 지시했다\\\"는 결론을 내리고, 빈칸은 그 과정에서 유리가 수행한 구체적인 역할을 요약해야 합니다. 본문 전체에서 유리는 통치자의 높은 지위를 보여주고, 신하들에게 경외감을 주며, 감시를 통해 복종을 유도하는 등 \\'권력 관계\\'를 만들고 유지하는 역할을 했습니다. 이 글의 주제는 \\'유리가 궁전에서 권력 관계를 강화하고 통제하는 전략적 도구로 사용되었다\\'는 것입니다. 이 역할을 가장 잘 요약하는 표현은 \\'권력 역학(power dynamic)의 조용한 집행자(silent enforcer)로서 행동하는 것\\'입니다. 유리는 물리적인 힘이 아니라 시선을 통해 조용히, 하지만 강력하게 위계질서를 강제했습니다."
+  }
+};
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        const header = `<div class="border-b pb-4 mb-4"><h1 class="text-2xl font-bold text-gray-800">${quizData.questionTitle}</h1><p class="mt-2 text-md text-gray-600">${quizData.questionInstruction}</p></div>`;
+        const passage = `<div class="bg-gray-50 p-4 rounded-lg text-gray-700 leading-relaxed">${quizData.passage}</div>`;
+        const options = quizData.options.map(option => `
+            <button onclick="checkAnswer(${option.number}, ${option.isCorrect})" class="w-full text-left p-4 my-2 border-2 border-gray-200 rounded-lg hover:bg-gray-100 hover:border-blue-400 transition-colors duration-200" data-option-number="${option.number}">
+                <span class="font-bold mr-2">${option.number}.</span><span>${option.text}</span>
+            </button>`).join('');
+        const rationale = `<div id="rationale-container" class="mt-6 hidden"></div>`;
+        container.innerHTML = header + passage + `<div class="my-6">${options}</div>` + rationale;
+    }
+
+    function checkAnswer(selectedNumber, isCorrect) {
+        const allOptionButtons = document.querySelectorAll('[data-option-number]');
+        const selectedButton = document.querySelector(`[data-option-number="${selectedNumber}"]`);
+        const rationaleContainer = document.getElementById('rationale-container');
+        
+        allOptionButtons.forEach(button => {
+            button.disabled = true;
+            button.classList.remove('hover:bg-gray-100', 'hover:border-blue-400');
+        });
+
+        if (isCorrect) {
+            selectedButton.classList.add('correct');
+            rationaleContainer.innerHTML = `<div class="bg-blue-100 border-l-4 border-blue-500 text-blue-800 p-4 rounded-md"><h3 class="font-bold">정답입니다! 🎉</h3><p class="mt-2">${quizData.answer.rationale}</p></div>`;
+        } else {
+            selectedButton.classList.add('incorrect');
+            const correctButton = document.querySelector(`[data-option-number="${quizData.answer.correctOptionNumber}"]`);
+            correctButton.classList.add('correct');
+            rationaleContainer.innerHTML = `<div class="bg-red-100 border-l-4 border-red-500 text-red-800 p-4 rounded-md"><h3 class="font-bold">아쉽네요. 다시 확인해 보세요.</h3><p class="mt-2">${quizData.answer.rationale}</p></div>`;
+        }
+        rationaleContainer.classList.remove('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', renderQuiz);
+</script>
+</body>
+</html>

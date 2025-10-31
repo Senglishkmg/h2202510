@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. 문단별 심층 분석 워크북 (33번)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .sentence { cursor: pointer; transition: background-color 0.2s; padding: 2px 0; border-radius: 4px; }
+    .sentence:hover { background-color: #dbeafe; }
+    .selected-boundary { font-weight: bold; color: #1d4ed8; }
+    .segment-divider { border-bottom: 2px dashed #fbbf24; margin: 8px 0; padding-bottom: 8px; }
+    .feedback-correct { color: #16a34a; }
+    .feedback-incorrect { color: #dc2626; }
+    .shake { animation: shake 0.5s; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+</style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 sm:p-6">
+<div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-4xl">
+    <div id="main-container">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 text-center border-b pb-4">3. 문단별 심층 분석 워크북 (33번)</h1>
+        <div id="segmentation-container">
+            <p id="segmentation-instruction" class="text-lg text-center bg-blue-50 text-blue-800 p-4 rounded-lg mb-6"></p>
+            <div id="text-container" class="text-gray-700 leading-relaxed text-lg p-4 border rounded-lg bg-white"></div>
+            <p id="segmentation-feedback" class="text-center mt-4 h-6 text-lg font-medium"></p>
+        </div>
+        <div id="analysis-container" class="hidden">
+            <p class="text-xl text-center bg-green-50 text-green-800 p-4 rounded-lg mb-8 font-semibold">성공! 이제 각 부분의 핵심 내용을 분석해 보세요.</p>
+            <div id="analysis-tasks-container" class="space-y-8"></div>
+        </div>
+    </div>
+</div>
+<script>
+    const data = {
+  "pageTitle": "3. 문단별 심층 분석 워크북 (33번)",
+  "fullText": "Historically, palaces weren’t just homes; they were carefully constructed stages designed to impress and intimidate. While stone symbolized permanence and strength, glass offered something equally powerful: visibility. The introduction of large windows in palaces allowed rulers to literally look down upon their subjects, emphasizing their elevated position. Conversely, it also allowed subjects to gaze up at their leaders, creating a sense of awe and distance. Consider the Palace of Versailles: its Hall of Mirrors, lined with reflective surfaces, not only magnified the grandeur of the space but also placed the king at the center of a dazzling display, reinforcing his absolute authority. The use of glass in palaces wasn’t merely aesthetic; it was strategic. Open sightlines allowed for better surveillance and control, ensuring the safety and security of the ruling family. Courtiers and visitors were constantly aware of being observed, contributing to an atmosphere of careful obedience and respect. The very architecture dictated social behavior, with glass _______________________. *surveillance: 감시 **courtier: 신하",
+  "segmentationTask": {
+    "instruction": "아래 원문은 분석지에 따라 세 부분으로 나뉩니다. 각 부분이 끝나는 문장을 클릭하여 영역을 나누어 보세요.",
+    "correctEndSentences": [
+      "Conversely, it also allowed subjects to (다)gaze up at their leaders, creating a sense of awe and distance.",
+      "The use of (가)glass in palaces wasn’t merely aesthetic; it was strategic.",
+      "The very architecture dictated social behavior, with glass ______________________."
+    ]
+  },
+  "analysisTasks": [
+    {
+      "partNumber": 1,
+      "partText": "Historically, palaces weren’t just homes; they were carefully constructed stages designed to (나)impress and intimidate. While stone symbolized permanence and strength, (가)glass offered something equally powerful: (가)visibility. The introduction of (가)large windows in palaces allowed rulers to literally (다)look down upon their subjects, emphasizing their (나)elevated position. Conversely, it also allowed subjects to (다)gaze up at their leaders, creating a sense of awe and distance.",
+      "mainIdea": {
+        "question": "궁전의 **(가)유리(가시성)**는 (다)상호간의 시선을 통해 통치자와 신하 사이의 (나)권력 관계를 명확히 [빈칸]",
+        "answer": "했다."
+      },
+      "role": {
+        "question": "궁전과 유리의 역할을 정의하고, 유리가 어떻게 지배자와 피지배자 간의 위계질서를 시각적으로 구축하는지 설명하는 [빈칸]",
+        "answer": "도입부입니다."
+      }
+    },
+    {
+      "partNumber": 2,
+      "partText": "Consider the Palace of Versailles: its (가)Hall of Mirrors, lined with (가)reflective surfaces, not only magnified the grandeur of the space but also placed the king at the center of a (다)dazzling display, reinforcing his (나)absolute authority. The use of (가)glass in palaces wasn’t merely aesthetic; it was strategic.",
+      "mainIdea": {
+        "question": "베르사유 궁전의 예시는 (가)유리가 어떻게 왕을 (다)시선의 중심에 놓아 (나)절대 권위를 강화하는지 [빈칸]",
+        "answer": "보여준다."
+      },
+      "role": {
+        "question": "구체적인 예시(베르사유 궁전)를 통해 앞선 주장을 뒷받침하고, \\'유리의 사용은 전략적\\'이라는 핵심 문장을 [빈칸]",
+        "answer": "제시합니다."
+      }
+    },
+    {
+      "partNumber": 3,
+      "partText": "(가)Open sightlines allowed for better (나)surveillance and control, ensuring the safety and security of the ruling family. Courtiers and visitors were constantly aware of (다)being observed, contributing to an atmosphere of careful obedience and respect. The very architecture dictated social behavior, with glass ______________________.",
+      "mainIdea": {
+        "question": "(가)개방된 시야는 (나)감시와 통제를 용이하게 했고, 사람들은 (다)관찰되고 있음을 인지하며 복종적인 태도를 [빈칸]",
+        "answer": "취했다."
+      },
+      "role": {
+        "question": "유리의 또 다른 기능인 \\'감시\\'를 설명하고, 이것이 사람들의 행동을 어떻게 통제하는지 분석하며 최종 결론을 [빈칸]",
+        "answer": "이끌어냅니다."
+      }
+    }
+  ]
+};
+    document.addEventListener('DOMContentLoaded', () => {
+        const instructionEl = document.getElementById('segmentation-instruction');
+        const textContainer = document.getElementById('text-container');
+        const feedbackEl = document.getElementById('segmentation-feedback');
+        const analysisContainer = document.getElementById('analysis-container');
+        const segmentationContainer = document.getElementById('segmentation-container');
+        let currentSegmentIndex = 0;
+        const correctBoundaries = data.segmentationTask.correctEndSentences;
+        
+        function initializeSegmentation() {
+            instructionEl.textContent = data.segmentationTask.instruction;
+            const sentences = data.fullText.match(/[^.!?]+[.!?]*/g) || [];
+            sentences.forEach(sentenceText => {
+                const span = document.createElement('span');
+                span.textContent = sentenceText.trim() + ' ';
+                span.classList.add('sentence');
+                span.onclick = handleSentenceClick;
+                textContainer.appendChild(span);
+            });
+        }
+
+        function handleSentenceClick(event) {
+            const clickedSentence = event.target.textContent.trim();
+            if (clickedSentence === correctBoundaries[currentSegmentIndex]) {
+                event.target.classList.add('selected-boundary', 'segment-divider');
+                event.target.onclick = null;
+                event.target.style.cursor = 'default';
+                currentSegmentIndex++;
+                feedbackEl.textContent = '정확합니다! 다음 영역을 나눠보세요.';
+                feedbackEl.className = 'text-center mt-4 h-6 text-lg font-medium feedback-correct';
+                if (currentSegmentIndex >= correctBoundaries.length) {
+                    feedbackEl.textContent = '모든 문단을 성공적으로 나누었습니다!';
+                    setTimeout(() => {
+                        segmentationContainer.classList.add('hidden');
+                        analysisContainer.classList.remove('hidden');
+                        initializeAnalysis();
+                    }, 1500);
+                }
+            } else {
+                feedbackEl.textContent = '틀렸습니다. 다시 시도해 보세요.';
+                feedbackEl.className = 'text-center mt-4 h-6 text-lg font-medium feedback-incorrect';
+                event.target.classList.add('shake');
+                setTimeout(() => event.target.classList.remove('shake'), 500);
+            }
+        }
+
+        function initializeAnalysis() {
+            const container = document.getElementById('analysis-tasks-container');
+            data.analysisTasks.forEach(task => {
+                const taskEl = document.createElement('div');
+                taskEl.className = 'border rounded-xl p-6 bg-gray-50';
+                const formattedQuestion = (q) => q.replace(/\\[빈칸\\]/g, '<input type="text" class="w-24 sm:w-32 mx-1 p-1 border-b-2 border-gray-300 focus:border-blue-500 outline-none bg-transparent">').replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-blue-600">$1</strong>');
+                taskEl.innerHTML = `
+                    <div class="mb-4"><span class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full mb-2">Part ${task.partNumber}</span><p class="text-gray-600 leading-relaxed">${task.partText}</p></div>
+                    <div class="space-y-4 mt-6">
+                        <div class="main-idea-question"><label class="block text-gray-700 font-medium">${formattedQuestion(task.mainIdea.question)}</label><span class="feedback-span text-sm font-medium ml-2"></span></div>
+                        <div class="role-question"><label class="block text-gray-700 font-medium">${formattedQuestion(task.role.question)}</label><span class="feedback-span text-sm font-medium ml-2"></span></div>
+                    </div>
+                    <div class="text-right mt-4"><button class="check-btn bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">정답 확인</button></div>`;
+                taskEl.querySelector('.check-btn').addEventListener('click', () => {
+                    checkAnswer(taskEl.querySelector('.main-idea-question input'), task.mainIdea.answer, taskEl.querySelector('.main-idea-question .feedback-span'));
+                    checkAnswer(taskEl.querySelector('.role-question input'), task.role.answer, taskEl.querySelector('.role-question .feedback-span'));
+                });
+                container.appendChild(taskEl);
+            });
+        }
+        function checkAnswer(inputEl, correctAnswer, feedbackEl) {
+            const userAnswer = inputEl.value.trim();
+            if (userAnswer && correctAnswer.toLowerCase().includes(userAnswer.toLowerCase())) {
+                feedbackEl.textContent = '✓ 정답';
+                feedbackEl.className = 'feedback-span text-sm font-medium ml-2 feedback-correct';
+                inputEl.style.borderColor = '#16a34a';
+            } else {
+                feedbackEl.textContent = `✗ 오답 (정답: ${correctAnswer})`;
+                feedbackEl.className = 'feedback-span text-sm font-medium ml-2 feedback-incorrect';
+                inputEl.style.borderColor = '#dc2626';
+            }
+        }
+        initializeSegmentation();
+    });
+</script>
+</body>
+</html>

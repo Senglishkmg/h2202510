@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>33번 심화 어휘 분석 테스트</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .correct-answer { color: #28a745; font-weight: 500; }
+        .incorrect-answer { color: #dc3545; font-weight: 500; text-decoration: line-through; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<div id="app-container" class="w-full max-w-3xl bg-white rounded-xl shadow-lg p-6 md:p-8">
+    <div id="main-screen">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2 text-center">33번 심화 어휘 분석 테스트</h1>
+        <p class="text-gray-600 mb-8 text-center">학습할 파트를 선택하세요.</p>
+        <div id="button-container" class="space-y-4"></div>
+    </div>
+    <div id="test-screen" class="hidden">
+        <h2 id="test-title" class="text-xl md:text-2xl font-bold text-blue-600 mb-4"></h2>
+        <p id="test-instruction" class="text-gray-700 mb-6"></p>
+        <form id="test-form" class="space-y-4"></form>
+        <button id="submit-button" class="mt-8 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700">제출하기</button>
+        <button id="back-to-main" class="mt-4 w-full bg-gray-200 text-gray-700 font-bold py-3 px-4 rounded-lg hover:bg-gray-300">처음으로</button>
+    </div>
+    <div id="result-screen" class="hidden">
+        <div id="result-content">
+            <h2 id="result-title" class="text-2xl font-bold text-green-600 mb-2 text-center"></h2>
+            <p id="result-score" class="text-lg text-gray-700 mb-6 text-center"></p>
+            <div id="result-table" class="border rounded-lg overflow-hidden"></div>
+        </div>
+        <div class="mt-8 flex flex-col md:flex-row gap-4">
+            <button id="save-pdf-button" class="w-full md:w-1/2 bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700">결과 저장 (PDF)</button>
+            <button id="next-test-button" class="w-full md:w-1/2 bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 hidden">다음 시험으로</button>
+            <button id="retry-button" class="w-full md:w-1/2 bg-gray-200 text-gray-700 font-bold py-3 px-4 rounded-lg hover:bg-gray-300">다시 풀기</button>
+        </div>
+    </div>
+</div>
+<script>
+    const quizData = {
+  "pageId": "h2251033vt",
+  "pageTitle": "33번 심화 어휘 분석 테스트",
+  "sections": [
+    {
+      "id": "section-6-1",
+      "buttonLabel": "6-1. CEFR B1 단어",
+      "testTitle": "CEFR B1 학습자가 어려워할 만한 단어",
+      "vocabTest": {
+        "instruction": "다음 단어의 의미나 철자를 정확히 입력하세요.",
+        "words": [
+          {
+            "word": "intimidate",
+            "meaning": "위협하다, 겁을 주다. [상대방이 두려움을 느끼게 만들어 원하는 대로 행동하게 함]"
+          },
+          {
+            "word": "permanence",
+            "meaning": "영속성, 영구성. [오랫동안 변하지 않고 지속되는 성질]"
+          },
+          {
+            "word": "elevated",
+            "meaning": "(지위가) 높은. [보통보다 더 높은 수준이나 위치에 있는]"
+          },
+          {
+            "word": "awe",
+            "meaning": "경외감. [존경심과 함께 두려움이나 놀라움을 느끼는 감정]"
+          },
+          {
+            "word": "magnify",
+            "meaning": "확대하다, 과장하다. [어떤 것을 실제보다 더 크거나 중요하게 보이게 만들다]"
+          },
+          {
+            "word": "aesthetic",
+            "meaning": "미적인, 미학의. [아름다움 및 예술과 관련된]"
+          },
+          {
+            "word": "obedience",
+            "meaning": "복종, 순종. [명령이나 규칙을 따르는 행위]"
+          }
+        ]
+      },
+      "sentenceTest": {
+        "instruction": "문맥에 맞게 빈칸에 알맞은 단어를 쓰세요.",
+        "sentences": [
+          {
+            "sentence": "He tried to ______ the witness into silence.",
+            "answer": "intimidate"
+          },
+          {
+            "sentence": "The pyramids were built to symbolize the ______ of the pharaohs' rule.",
+            "answer": "permanence"
+          },
+          {
+            "sentence": "She holds a very ______ position in the company.",
+            "answer": "elevated"
+          },
+          {
+            "sentence": "The tourists were filled with ______ at the sight of the Grand Canyon.",
+            "answer": "awe"
+          },
+          {
+            "sentence": "The lens can ______ objects to 100 times their original size.",
+            "answer": "magnify"
+          },
+          {
+            "sentence": "The new building has a very pleasing ______.",
+            "answer": "aesthetic"
+          },
+          {
+            "sentence": "The soldiers are trained to show absolute ______ to their officers.",
+            "answer": "obedience"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-6-2",
+      "buttonLabel": "6-2. 혼동 어휘",
+      "testTitle": "혼동하기 쉬운 어휘들",
+      "confusingPairTest": {
+        "instruction": "문맥에 맞는 단어를 보기에서 골라 빈칸에 쓰세요.",
+        "pairs": [
+          {
+            "options": [
+              "impress",
+              "express"
+            ],
+            "sentence": "impress (깊은 인상을 주다): '안으로(im-) 누르다(press)'는 어원에서 온 말로, 다른 사람의 마음에 강한 긍정적 감정이나 존경심을 남기는 것을 의미합니다. express (표현하다): '밖으로(ex-) 누르다(press)'는 어원에서 온 말로, 자신의 생각이나 감정을 말이나 행동으로 나타내는 것을 의미합니다.",
+            "answer": "impress"
+          },
+          {
+            "options": [
+              "aware",
+              "awake"
+            ],
+            "sentence": "aware (인지하는, 알고 있는): 어떤 사실이나 상황의 존재를 알고 있다는 의미입니다. (예: aware of the danger) awake (깨어 있는): 잠들어 있지 않은 상태를 의미합니다. (예: I was still awake at midnight.)",
+            "answer": "aware"
+          }
+        ]
+      }
+    },
+    {
+      "id": "section-6-3",
+      "buttonLabel": "6-3. 동의어/반의어",
+      "testTitle": "동의어 및 반의어 (선택형)",
+      "synonymAntonymChoiceTest": {
+        "instruction": "주어진 단어의 동의어 또는 반의어로 가장 적절한 것을 고르세요.",
+        "questions": [
+          {
+            "word": "intimidate",
+            "type": "동의어",
+            "options": [
+              "planned",
+              "encourage",
+              "intimidate",
+              "threaten"
+            ],
+            "answer": "threaten"
+          },
+          {
+            "word": "intimidate",
+            "type": "반의어",
+            "options": [
+              "comfort",
+              "intimidate",
+              "encourage",
+              "reinforce"
+            ],
+            "answer": "encourage"
+          },
+          {
+            "word": "reinforce",
+            "type": "동의어",
+            "options": [
+              "undermine",
+              "haphazard",
+              "consolidate",
+              "strengthen"
+            ],
+            "answer": "strengthen"
+          },
+          {
+            "word": "reinforce",
+            "type": "반의어",
+            "options": [
+              "undermine",
+              "reinforce",
+              "weaken",
+              "encourage"
+            ],
+            "answer": "weaken"
+          },
+          {
+            "word": "strategic",
+            "type": "동의어",
+            "options": [
+              "scare",
+              "frighten",
+              "calculated",
+              "tactical"
+            ],
+            "answer": "tactical"
+          },
+          {
+            "word": "strategic",
+            "type": "반의어",
+            "options": [
+              "comfort",
+              "random",
+              "planned",
+              "diminish"
+            ],
+            "answer": "random"
+          }
+        ]
+      }
+    }
+  ]
+};
+    const mainScreen = document.getElementById('main-screen'), testScreen = document.getElementById('test-screen'), resultScreen = document.getElementById('result-screen'), buttonContainer = document.getElementById('button-container');
+    let currentSectionId = null, currentTestType = null;
+
+    function showScreen(screen) {
+        mainScreen.classList.add('hidden'); testScreen.classList.add('hidden'); resultScreen.classList.add('hidden');
+        screen.classList.remove('hidden');
+    }
+    function initMainScreen() {
+        buttonContainer.innerHTML = '';
+        quizData.sections.forEach(section => {
+            const button = document.createElement('button');
+            button.className = "w-full bg-white border border-gray-300 text-gray-700 font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 hover:border-blue-500 text-left";
+            button.textContent = section.buttonLabel;
+            button.onclick = () => startTest(section.id);
+            buttonContainer.appendChild(button);
+        });
+        showScreen(mainScreen);
+    }
+    document.getElementById('back-to-main').onclick = initMainScreen;
+
+    function startTest(sectionId, testType = null) {
+        currentSectionId = sectionId;
+        const section = quizData.sections.find(s => s.id === sectionId);
+        const testForm = document.getElementById('test-form'), testTitle = document.getElementById('test-title'), testInstruction = document.getElementById('test-instruction'), submitButton = document.getElementById('submit-button');
+        testForm.innerHTML = '';
+        if (!testType) {
+            if (section.vocabTest) testType = 'vocabTest'; else if (section.confusingPairTest) testType = 'confusingPairTest'; else if (section.synonymAntonymChoiceTest) testType = 'synonymAntonymChoiceTest';
+        }
+        currentTestType = testType;
+        let testData;
+        switch(testType) {
+            case 'vocabTest':
+                testData = section.vocabTest;
+                testData.words.forEach((item, index) => {
+                    const isMeaningQuestion = Math.random() > 0.5;
+                    testForm.innerHTML += `<div class="p-4 border rounded-lg bg-gray-50"><label for="q-${index}" class="block text-md font-medium text-gray-700 mb-2">${index + 1}. ${isMeaningQuestion ? item.word : item.meaning}</label><input type="text" id="q-${index}" data-answer="${isMeaningQuestion ? item.meaning : item.word}" class="w-full p-2 border border-gray-300 rounded-md"></div>`;
+                });
+                break;
+            case 'sentenceTest':
+                 testData = section.sentenceTest;
+                 testData.sentences.forEach((item, index) => {
+                    testForm.innerHTML += `<div class="p-4 border rounded-lg bg-gray-50"><p class="text-md text-gray-800 mb-2">${index + 1}. ${item.sentence.replace('______', '<span class="font-bold text-blue-600">[빈칸]</span>')}</p><input type="text" id="q-${index}" data-answer="${item.answer}" class="w-full p-2 border border-gray-300 rounded-md"></div>`;
+                });
+                break;
+            case 'confusingPairTest':
+                testData = section.confusingPairTest;
+                testData.pairs.forEach((item, index) => {
+                    let inputHtml = Array.isArray(item.answers) ? item.answers.map((ans, i) => `<input type="text" data-answer="${ans}" placeholder="빈칸 ${i + 1}" class="w-full p-2 border border-gray-300 rounded-md mb-2">`).join('') : `<input type="text" data-answer="${item.answer}" class="w-full p-2 border border-gray-300 rounded-md">`;
+                    testForm.innerHTML += `<div class="p-4 border rounded-lg bg-gray-50"><p class="text-md text-gray-800 mb-2">${index + 1}. ${item.sentence.replace(/______/g, '<span class="font-bold text-blue-600">[빈칸]</span>')}</p><p class="text-sm text-gray-500 mb-2">보기: ${item.options.join(', ')}</p>${inputHtml}</div>`;
+                });
+                break;
+            case 'synonymAntonymChoiceTest':
+                testData = section.synonymAntonymChoiceTest;
+                testData.questions.forEach((item, index) => {
+                    const optionsHtml = item.options.map(opt => `<label class="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-100 cursor-pointer"><input type="radio" name="q-${index}" value="${opt}" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"><span class="text-gray-700">${opt}</span></label>`).join('');
+                    testForm.innerHTML += `<div class="p-4 border rounded-lg bg-gray-50"><p class="text-md font-medium text-gray-800 mb-2">${index + 1}. <span class="font-bold">${item.word}</span>의 <span class="text-blue-600 font-bold">${item.type}</span>?</p><div class="mt-2 space-y-1" data-answer="${item.answer}">${optionsHtml}</div></div>`;
+                });
+                break;
+        }
+        testTitle.textContent = section.testTitle; testInstruction.textContent = testData.instruction;
+        submitButton.onclick = () => submitTest(sectionId, currentTestType);
+        showScreen(testScreen);
+    }
+    
+    function submitTest(sectionId, testType) {
+        const section = quizData.sections.find(s => s.id === sectionId);
+        const form = document.getElementById('test-form');
+        let score = 0, total = 0;
+        let resultsHtml = '<table class="w-full text-sm text-left text-gray-500"><thead class="text-xs text-gray-700 uppercase bg-gray-50"><tr><th class="px-6 py-3">문제</th><th class="px-6 py-3">제출 답안</th><th class="px-6 py-3">정답</th></tr></thead><tbody>';
+        switch(testType) {
+            case 'vocabTest': case 'sentenceTest':
+                const inputs = form.querySelectorAll('input[type="text"]');
+                total = inputs.length;
+                inputs.forEach(input => {
+                    const userAnswer = input.value.trim(), correctAnswer = input.dataset.answer, isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+                    if (isCorrect) score++;
+                    resultsHtml += `<tr class="bg-white border-b ${isCorrect ? '' : 'bg-red-50'}"><td class="px-6 py-4">${input.previousElementSibling?.textContent || input.parentElement.querySelector('p').textContent}</td><td class="px-6 py-4">${isCorrect ? userAnswer : `<span class="incorrect-answer">${userAnswer || '미입력'}</span>`}</td><td class="px-6 py-4 correct-answer">${correctAnswer}</td></tr>`;
+                });
+                break;
+            case 'confusingPairTest':
+                 const questions = form.querySelectorAll('.p-4'); total = questions.length;
+                 questions.forEach(q => {
+                    const userInputs = q.querySelectorAll('input[type="text"]'); let allCorrect = true, userAnswers = [], correctAnswers = [];
+                    userInputs.forEach(input => { const ua = input.value.trim(), ca = input.dataset.answer; userAnswers.push(ua); correctAnswers.push(ca); if (ua.toLowerCase() !== ca.toLowerCase()) allCorrect = false; });
+                    if (allCorrect) score++;
+                    const submittedAnswerHtml = userAnswers.map((ua, i) => ua.toLowerCase() === correctAnswers[i].toLowerCase() ? ua : `<span class="incorrect-answer">${ua || '미입력'}</span>`).join(', ');
+                    resultsHtml += `<tr class="bg-white border-b ${allCorrect ? '' : 'bg-red-50'}"><td class="px-6 py-4">${q.querySelector('p').textContent}</td><td class="px-6 py-4">${submittedAnswerHtml}</td><td class="px-6 py-4 correct-answer">${correctAnswers.join(', ')}</td></tr>`;
+                 });
+                break;
+            case 'synonymAntonymChoiceTest':
+                const choiceQuestions = form.querySelectorAll('.p-4'); total = choiceQuestions.length;
+                choiceQuestions.forEach((q, index) => {
+                    const selected = q.querySelector(`input[name="q-${index}"]:checked`), userAnswer = selected ? selected.value : null, correctAnswer = q.querySelector('[data-answer]').dataset.answer, isCorrect = userAnswer === correctAnswer;
+                    if(isCorrect) score++;
+                    resultsHtml += `<tr class="bg-white border-b ${isCorrect ? '' : 'bg-red-50'}"><td class="px-6 py-4">${q.querySelector('p').textContent}</td><td class="px-6 py-4">${isCorrect ? userAnswer : `<span class="incorrect-answer">${userAnswer || '미선택'}</span>`}</td><td class="px-6 py-4 correct-answer">${correctAnswer}</td></tr>`;
+                });
+                break;
+        }
+        resultsHtml += '</tbody></table>';
+        document.getElementById('result-title').textContent = `${section.testTitle} 결과`;
+        document.getElementById('result-score').textContent = `총 ${total}문제 중 ${score}개를 맞혔습니다!`;
+        document.getElementById('result-table').innerHTML = resultsHtml;
+        const nextTestButton = document.getElementById('next-test-button'), retryButton = document.getElementById('retry-button');
+        if (sectionId === 'section-6-1' && testType === 'vocabTest') {
+            nextTestButton.classList.remove('hidden'); nextTestButton.textContent = '다음 시험으로 (예문)';
+            nextTestButton.onclick = () => startTest('section-6-1', 'sentenceTest');
+        } else { nextTestButton.classList.add('hidden'); }
+        retryButton.onclick = () => startTest(sectionId, testType);
+        document.getElementById('save-pdf-button').onclick = () => saveResultsAsPDF(section.testTitle);
+        showScreen(resultScreen);
+    }
+    
+    function saveResultsAsPDF(title) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const content = document.getElementById('result-content');
+        html2canvas(content).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const imgProps= doc.getImageProperties(imgData);
+            const pdfWidth = doc.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            doc.save(`${title.replace(/ /g, '_')}_결과.pdf`);
+        });
+    }
+    initMainScreen();
+</script>
+</body>
+</html>

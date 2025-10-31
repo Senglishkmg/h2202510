@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. 문단별 심층 분석 워크북 (30번)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .sentence { cursor: pointer; transition: background-color 0.2s; padding: 2px 0; border-radius: 4px; }
+    .sentence:hover { background-color: #dbeafe; }
+    .selected-boundary { font-weight: bold; color: #1d4ed8; }
+    .segment-divider { border-bottom: 2px dashed #fbbf24; margin: 8px 0; padding-bottom: 8px; }
+    .feedback-correct { color: #16a34a; }
+    .feedback-incorrect { color: #dc2626; }
+    .shake { animation: shake 0.5s; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+</style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 sm:p-6">
+<div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-4xl">
+    <div id="main-container">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 text-center border-b pb-4">3. 문단별 심층 분석 워크북 (30번)</h1>
+        <div id="segmentation-container">
+            <p id="segmentation-instruction" class="text-lg text-center bg-blue-50 text-blue-800 p-4 rounded-lg mb-6"></p>
+            <div id="text-container" class="text-gray-700 leading-relaxed text-lg p-4 border rounded-lg bg-white"></div>
+            <p id="segmentation-feedback" class="text-center mt-4 h-6 text-lg font-medium"></p>
+        </div>
+        <div id="analysis-container" class="hidden">
+            <p class="text-xl text-center bg-green-50 text-green-800 p-4 rounded-lg mb-8 font-semibold">성공! 이제 각 부분의 핵심 내용을 분석해 보세요.</p>
+            <div id="analysis-tasks-container" class="space-y-8"></div>
+        </div>
+    </div>
+</div>
+<script>
+    const data = {
+  "pageTitle": "3. 문단별 심층 분석 워크북 (30번)",
+  "fullText": "Within liberal culture, the value of fair equality of opportunity for individuals ① outweighs the preservation of the family’s integrity. In contrast, for Confucian culture, while seeking fair equality of opportunity for individuals is important, the family assumes a fundamental role in human flourishing, and living within a family institution is considered the ② essential way of life. Individuals are primarily understood as family members before they are regarded as state citizens. Therefore, for Confucians, the family possesses inherent value that should never be ③ abandoned, even if it results in certain societal inequalities. Some cultures, like the liberal one, may choose to impose increasing ④ restrictions on the role of families and implement more egalitarian government programs for education, healthcare, and other positive rights in society in the pursuit of fair equality of opportunity. On the other hand, other cultures, like the Confucian one, may prefer to primarily assign welfare responsibilities to the family, ⑤ rejecting inequalities stemming from the existence of the family as long as everyone’s basic freedoms and rights are safeguarded in the state.",
+  "segmentationTask": {
+    "instruction": "아래 원문은 분석지에 따라 세 부분으로 나뉩니다. 각 부분이 끝나는 문장을 클릭하여 영역을 나누어 보세요.",
+    "correctEndSentences": [
+      "(다)In contrast, for (나)Confucian culture, while seeking (가)fair equality of opportunity for individuals is important, (나)the family assumes a fundamental role in human flourishing, and living within a family institution is considered the ② essential way of life.",
+      "Therefore, for (나)Confucians, (나)the family possesses (나)inherent value that should never be ③ abandoned, (다)even if it results in certain societal inequalities.",
+      "(다)On the other hand, other cultures, like the (나)Confucian one, may prefer to primarily (나)assign welfare responsibilities to the family, ⑤ rejecting inequalities stemming from the existence of the family as long as everyone’s basic freedoms and rights are safeguarded in the state."
+    ]
+  },
+  "analysisTasks": [
+    {
+      "partNumber": 1,
+      "partText": "Within (가)liberal culture, the value of (가)fair equality of opportunity for individuals ① outweighs the preservation of the family’s integrity. (다)In contrast, for (나)Confucian culture, while seeking (가)fair equality of opportunity for individuals is important, (나)the family assumes a fundamental role in human flourishing, and living within a family institution is considered the ② essential way of life.",
+      "mainIdea": {
+        "question": "(가)자유주의 문화는 개인의 기회를, (나)유교 문화는 가족의 역할을 더 중시하는 (다)대립적 가치관을 [빈칸]",
+        "answer": "가진다."
+      },
+      "role": {
+        "question": "In contrast를 중심으로 두 문화의 핵심적인 가치 차이를 명확하게 제시하며 글의 기본 대립 구도를 설정하는 [빈칸]",
+        "answer": "도입부입니다."
+      }
+    },
+    {
+      "partNumber": 2,
+      "partText": "Individuals are primarily understood as (나)family members before they are regarded as state citizens. Therefore, for (나)Confucians, (나)the family possesses (나)inherent value that should never be ③ abandoned, (다)even if it results in certain societal inequalities.",
+      "mainIdea": {
+        "question": "(나)유교 문화에서 가족은 개인의 정체성에 우선하며, 사회적 불평등을 감수할 만큼 (다)절대적인 가치를 [빈칸]",
+        "answer": "지닌다."
+      },
+      "role": {
+        "question": "유교 문화의 관점을 더 깊이 설명하며, 가족의 가치를 위해 불평등까지 감수할 수 있다는 점을 강조하여 그 입장을 명확히 [빈칸]",
+        "answer": "합니다."
+      }
+    },
+    {
+      "partNumber": 3,
+      "partText": "Some cultures, like the (가)liberal one, may choose to (가)impose increasing restrictions on the role of families... in the pursuit of (가)fair equality of opportunity. (다)On the other hand, other cultures, like the (나)Confucian one, may prefer to primarily (나)assign welfare responsibilities to the family, ⑤ rejecting inequalities stemming from the existence of the family as long as everyone’s basic freedoms and rights are safeguarded in the state.",
+      "mainIdea": {
+        "question": "(가)자유주의 문화는 국가가 개입해 가족의 역할을 제한하는 반면, (나)유교 문화는 가족에게 복지 책임을 맡기며 그로 인한 불평등을 [빈칸]",
+        "answer": "감수한다."
+      },
+      "role": {
+        "question": "앞에서 설명한 두 문화의 가치관이 실제 사회 정책(복지 책임)에서 어떻게 다르게 적용되는지를 보여주며 글을 [빈칸]",
+        "answer": "마무리합니다."
+      }
+    }
+  ]
+};
+    document.addEventListener('DOMContentLoaded', () => {
+        const instructionEl = document.getElementById('segmentation-instruction');
+        const textContainer = document.getElementById('text-container');
+        const feedbackEl = document.getElementById('segmentation-feedback');
+        const analysisContainer = document.getElementById('analysis-container');
+        const segmentationContainer = document.getElementById('segmentation-container');
+        let currentSegmentIndex = 0;
+        const correctBoundaries = data.segmentationTask.correctEndSentences;
+        
+        function initializeSegmentation() {
+            instructionEl.textContent = data.segmentationTask.instruction;
+            const sentences = data.fullText.match(/[^.!?]+[.!?]*/g) || [];
+            sentences.forEach(sentenceText => {
+                const span = document.createElement('span');
+                span.textContent = sentenceText.trim() + ' ';
+                span.classList.add('sentence');
+                span.onclick = handleSentenceClick;
+                textContainer.appendChild(span);
+            });
+        }
+
+        function handleSentenceClick(event) {
+            const clickedSentence = event.target.textContent.trim();
+            if (clickedSentence === correctBoundaries[currentSegmentIndex]) {
+                event.target.classList.add('selected-boundary', 'segment-divider');
+                event.target.onclick = null;
+                event.target.style.cursor = 'default';
+                currentSegmentIndex++;
+                feedbackEl.textContent = '정확합니다! 다음 영역을 나눠보세요.';
+                feedbackEl.className = 'text-center mt-4 h-6 text-lg font-medium feedback-correct';
+                if (currentSegmentIndex >= correctBoundaries.length) {
+                    feedbackEl.textContent = '모든 문단을 성공적으로 나누었습니다!';
+                    setTimeout(() => {
+                        segmentationContainer.classList.add('hidden');
+                        analysisContainer.classList.remove('hidden');
+                        initializeAnalysis();
+                    }, 1500);
+                }
+            } else {
+                feedbackEl.textContent = '틀렸습니다. 다시 시도해 보세요.';
+                feedbackEl.className = 'text-center mt-4 h-6 text-lg font-medium feedback-incorrect';
+                event.target.classList.add('shake');
+                setTimeout(() => event.target.classList.remove('shake'), 500);
+            }
+        }
+
+        function initializeAnalysis() {
+            const container = document.getElementById('analysis-tasks-container');
+            data.analysisTasks.forEach(task => {
+                const taskEl = document.createElement('div');
+                taskEl.className = 'border rounded-xl p-6 bg-gray-50';
+                const formattedQuestion = (q) => q.replace(/\\[빈칸\\]/g, '<input type="text" class="w-24 sm:w-32 mx-1 p-1 border-b-2 border-gray-300 focus:border-blue-500 outline-none bg-transparent">').replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-blue-600">$1</strong>');
+                taskEl.innerHTML = `
+                    <div class="mb-4"><span class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full mb-2">Part ${task.partNumber}</span><p class="text-gray-600 leading-relaxed">${task.partText}</p></div>
+                    <div class="space-y-4 mt-6">
+                        <div class="main-idea-question"><label class="block text-gray-700 font-medium">${formattedQuestion(task.mainIdea.question)}</label><span class="feedback-span text-sm font-medium ml-2"></span></div>
+                        <div class="role-question"><label class="block text-gray-700 font-medium">${formattedQuestion(task.role.question)}</label><span class="feedback-span text-sm font-medium ml-2"></span></div>
+                    </div>
+                    <div class="text-right mt-4"><button class="check-btn bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">정답 확인</button></div>`;
+                taskEl.querySelector('.check-btn').addEventListener('click', () => {
+                    checkAnswer(taskEl.querySelector('.main-idea-question input'), task.mainIdea.answer, taskEl.querySelector('.main-idea-question .feedback-span'));
+                    checkAnswer(taskEl.querySelector('.role-question input'), task.role.answer, taskEl.querySelector('.role-question .feedback-span'));
+                });
+                container.appendChild(taskEl);
+            });
+        }
+        function checkAnswer(inputEl, correctAnswer, feedbackEl) {
+            const userAnswer = inputEl.value.trim();
+            if (userAnswer && correctAnswer.toLowerCase().includes(userAnswer.toLowerCase())) {
+                feedbackEl.textContent = '✓ 정답';
+                feedbackEl.className = 'feedback-span text-sm font-medium ml-2 feedback-correct';
+                inputEl.style.borderColor = '#16a34a';
+            } else {
+                feedbackEl.textContent = `✗ 오답 (정답: ${correctAnswer})`;
+                feedbackEl.className = 'feedback-span text-sm font-medium ml-2 feedback-incorrect';
+                inputEl.style.borderColor = '#dc2626';
+            }
+        }
+        initializeSegmentation();
+    });
+</script>
+</body>
+</html>

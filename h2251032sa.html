@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. 문단별 심층 분석 워크북 (32번)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .sentence { cursor: pointer; transition: background-color 0.2s; padding: 2px 0; border-radius: 4px; }
+    .sentence:hover { background-color: #dbeafe; }
+    .selected-boundary { font-weight: bold; color: #1d4ed8; }
+    .segment-divider { border-bottom: 2px dashed #fbbf24; margin: 8px 0; padding-bottom: 8px; }
+    .feedback-correct { color: #16a34a; }
+    .feedback-incorrect { color: #dc2626; }
+    .shake { animation: shake 0.5s; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+</style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 sm:p-6">
+<div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-4xl">
+    <div id="main-container">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 text-center border-b pb-4">3. 문단별 심층 분석 워크북 (32번)</h1>
+        <div id="segmentation-container">
+            <p id="segmentation-instruction" class="text-lg text-center bg-blue-50 text-blue-800 p-4 rounded-lg mb-6"></p>
+            <div id="text-container" class="text-gray-700 leading-relaxed text-lg p-4 border rounded-lg bg-white"></div>
+            <p id="segmentation-feedback" class="text-center mt-4 h-6 text-lg font-medium"></p>
+        </div>
+        <div id="analysis-container" class="hidden">
+            <p class="text-xl text-center bg-green-50 text-green-800 p-4 rounded-lg mb-8 font-semibold">성공! 이제 각 부분의 핵심 내용을 분석해 보세요.</p>
+            <div id="analysis-tasks-container" class="space-y-8"></div>
+        </div>
+    </div>
+</div>
+<script>
+    const data = {
+  "pageTitle": "3. 문단별 심층 분석 워크북 (32번)",
+  "fullText": "Just as an expert in the taste and colour of wine will gain much by being aware of the chemistry that underlies those qualities, so each perspective on the body can potentially enhance the others. And yet every scientific tool, from microscopes to mathematics, and every aspect of the body, from the brain to the microorganism, requires such depth of expertise that this tends not to happen: we tend to study the human body in silos, each community sectioned from the others by its own specialised vocabulary. Research communities may be dedicated to one type of scientific tool or a specific component of the body, such as one type of cell. How different types of cell communicate with one another becomes its own specialist topic. Even simple forms of life on Earth are now rarely studied as a whole, and the human body is evidently much more complex. As long ago as 1890, The Times newspaper commented that knowledge ‘had already become too vast to be manageable’. Today, _______________________. [3점]",
+  "segmentationTask": {
+    "instruction": "아래 원문은 분석지에 따라 세 부분으로 나뉩니다. 각 부분이 끝나는 문장을 클릭하여 영역을 나누어 보세요.",
+    "correctEndSentences": [
+      "Just as an expert in the taste and colour of wine will gain much by being aware of the chemistry that underlies those qualities, so each perspective on the body can potentially enhance the others.",
+      "How different types of cell communicate with one another becomes its own specialist topic.",
+      "Today, _______________________."
+    ]
+  },
+  "analysisTasks": [
+    {
+      "partNumber": 1,
+      "partText": "Just as an expert in the taste and colour of wine will gain much by being aware of the chemistry that underlies those qualities, so each perspective on the body can potentially enhance the others.",
+      "mainIdea": {
+        "question": "다양한 학문적 관점의 통합은 서로에게 도움이 되는 이상적인 [빈칸]",
+        "answer": "상태이다."
+      },
+      "role": {
+        "question": "통합적 연구의 이점을 제시하며, 이어질 현실의 문제점과 대조를 이루는 이상적인 상황을 [빈칸]",
+        "answer": "설정합니다."
+      }
+    },
+    {
+      "partNumber": 2,
+      "partText": "And yet every scientific tool, from microscopes to mathematics, and every aspect of the body, from the brain to the microorganism, requires such depth of expertise that this tends not to happen: we tend to study the human body in silos, each community sectioned from the others by its own specialised vocabulary. Research communities may be dedicated to one type of scientific tool or a specific component of the body, such as one type of cell. How different types of cell communicate with one another becomes its own specialist topic.",
+      "mainIdea": {
+        "question": "학문 분야가 요구하는 깊은 (가)전문성 때문에 서로 단절된 채 연구되어 (나)통합적 접근이 이루어지지 [빈칸]",
+        "answer": "않는다."
+      },
+      "role": {
+        "question": "글의 핵심 문제점인 \\'지식의 파편화(in silos)\\' 현상을 구체적으로 제시하고 [빈칸]",
+        "answer": "설명합니다."
+      }
+    },
+    {
+      "partNumber": 3,
+      "partText": "Even simple forms of life on Earth are now rarely studied as a whole, and the human body is evidently much more complex. As long ago as 1890, The Times newspaper commented that knowledge ‘had already become too vast to be manageable’. Today, _______________________.",
+      "mainIdea": {
+        "question": "과거부터 지적된 (다)지식의 방대함 때문에 이제는 (나)전체를 아우르는 연구가 거의 [빈칸]",
+        "answer": "불가능해졌다."
+      },
+      "role": {
+        "question": "과거의 사례를 통해 문제의 역사성을 보여주고, 이를 바탕으로 현재 상황에 대한 최종적인 결론을 [빈칸]",
+        "answer": "유도합니다."
+      }
+    }
+  ]
+};
+    document.addEventListener('DOMContentLoaded', () => {
+        const instructionEl = document.getElementById('segmentation-instruction');
+        const textContainer = document.getElementById('text-container');
+        const feedbackEl = document.getElementById('segmentation-feedback');
+        const analysisContainer = document.getElementById('analysis-container');
+        const segmentationContainer = document.getElementById('segmentation-container');
+        let currentSegmentIndex = 0;
+        const correctBoundaries = data.segmentationTask.correctEndSentences;
+        
+        function initializeSegmentation() {
+            instructionEl.textContent = data.segmentationTask.instruction;
+            const sentences = data.fullText.match(/[^.!?]+[.!?]*/g) || [];
+            sentences.forEach(sentenceText => {
+                const span = document.createElement('span');
+                span.textContent = sentenceText.trim() + ' ';
+                span.classList.add('sentence');
+                span.onclick = handleSentenceClick;
+                textContainer.appendChild(span);
+            });
+        }
+
+        function handleSentenceClick(event) {
+            const clickedSentence = event.target.textContent.trim();
+            if (clickedSentence === correctBoundaries[currentSegmentIndex]) {
+                event.target.classList.add('selected-boundary', 'segment-divider');
+                event.target.onclick = null;
+                event.target.style.cursor = 'default';
+                currentSegmentIndex++;
+                feedbackEl.textContent = '정확합니다! 다음 영역을 나눠보세요.';
+                feedbackEl.className = 'text-center mt-4 h-6 text-lg font-medium feedback-correct';
+                if (currentSegmentIndex >= correctBoundaries.length) {
+                    feedbackEl.textContent = '모든 문단을 성공적으로 나누었습니다!';
+                    setTimeout(() => {
+                        segmentationContainer.classList.add('hidden');
+                        analysisContainer.classList.remove('hidden');
+                        initializeAnalysis();
+                    }, 1500);
+                }
+            } else {
+                feedbackEl.textContent = '틀렸습니다. 다시 시도해 보세요.';
+                feedbackEl.className = 'text-center mt-4 h-6 text-lg font-medium feedback-incorrect';
+                event.target.classList.add('shake');
+                setTimeout(() => event.target.classList.remove('shake'), 500);
+            }
+        }
+
+        function initializeAnalysis() {
+            const container = document.getElementById('analysis-tasks-container');
+            data.analysisTasks.forEach(task => {
+                const taskEl = document.createElement('div');
+                taskEl.className = 'border rounded-xl p-6 bg-gray-50';
+                const formattedQuestion = (q) => q.replace(/\\[빈칸\\]/g, '<input type="text" class="w-24 sm:w-32 mx-1 p-1 border-b-2 border-gray-300 focus:border-blue-500 outline-none bg-transparent">').replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-blue-600">$1</strong>');
+                taskEl.innerHTML = `
+                    <div class="mb-4"><span class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full mb-2">Part ${task.partNumber}</span><p class="text-gray-600 leading-relaxed">${task.partText}</p></div>
+                    <div class="space-y-4 mt-6">
+                        <div class="main-idea-question"><label class="block text-gray-700 font-medium">${formattedQuestion(task.mainIdea.question)}</label><span class="feedback-span text-sm font-medium ml-2"></span></div>
+                        <div class="role-question"><label class="block text-gray-700 font-medium">${formattedQuestion(task.role.question)}</label><span class="feedback-span text-sm font-medium ml-2"></span></div>
+                    </div>
+                    <div class="text-right mt-4"><button class="check-btn bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">정답 확인</button></div>`;
+                taskEl.querySelector('.check-btn').addEventListener('click', () => {
+                    checkAnswer(taskEl.querySelector('.main-idea-question input'), task.mainIdea.answer, taskEl.querySelector('.main-idea-question .feedback-span'));
+                    checkAnswer(taskEl.querySelector('.role-question input'), task.role.answer, taskEl.querySelector('.role-question .feedback-span'));
+                });
+                container.appendChild(taskEl);
+            });
+        }
+        function checkAnswer(inputEl, correctAnswer, feedbackEl) {
+            const userAnswer = inputEl.value.trim();
+            if (userAnswer && correctAnswer.toLowerCase().includes(userAnswer.toLowerCase())) {
+                feedbackEl.textContent = '✓ 정답';
+                feedbackEl.className = 'feedback-span text-sm font-medium ml-2 feedback-correct';
+                inputEl.style.borderColor = '#16a34a';
+            } else {
+                feedbackEl.textContent = `✗ 오답 (정답: ${correctAnswer})`;
+                feedbackEl.className = 'feedback-span text-sm font-medium ml-2 feedback-incorrect';
+                inputEl.style.borderColor = '#dc2626';
+            }
+        }
+        initializeSegmentation();
+    });
+</script>
+</body>
+</html>
